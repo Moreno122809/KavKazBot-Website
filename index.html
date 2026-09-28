@@ -1,252 +1,522 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>KavKaz Bot – Status</title>
-    <link rel="stylesheet" href="style.css">
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
 </head>
+
 
 <body>
 
+
 <header>
-    <div class="logo">KAVKAZ</div>
+
+    <div class="logo">
+        KAVKAZ
+    </div>
+
 
     <nav>
-        <a href="#status">Status</a>
-        <a href="#changelog">Change Log</a>
-        <a href="#commands">Befehle</a>
-        <a href="admin.html">Admin</a>
+
+        <a href="#status">
+            Status
+        </a>
+
+        <a
+            href="#changelog"
+            id="changelog-nav-link"
+            style="display: none;"
+        >
+            Change Log
+        </a>
+
+        <a href="#commands">
+            Befehle
+        </a>
+
+        <a href="admin.html">
+            Admin
+        </a>
+
     </nav>
+
 </header>
+
+
 
 <main>
 
+
+    <!-- ================================= -->
+    <!-- HERO -->
+    <!-- ================================= -->
+
     <section class="hero">
+
         <div class="hero-content">
-            <p class="small-title">DISCORD BOT</p>
-            <h1>KavKaz Bot</h1>
+
+            <p class="small-title">
+                DISCORD BOT
+            </p>
+
+            <h1>
+                KavKaz Bot
+            </h1>
+
             <p class="description">
                 Status, Updates und Informationen rund um den KavKaz Discord Bot.
             </p>
+
         </div>
+
     </section>
 
-    <section id="status" class="section">
+
+
+    <!-- ================================= -->
+    <!-- STATUS -->
+    <!-- ================================= -->
+
+    <section
+        id="status"
+        class="section"
+    >
+
         <div class="section-title">
-            <span>STATUS</span>
-            <h2>Bot Status</h2>
+
+            <span>
+                STATUS
+            </span>
+
+            <h2>
+                Bot Status
+            </h2>
+
         </div>
+
 
         <div class="status-card">
-            <div id="status-indicator" class="status-indicator offline"></div>
+
+            <div
+                id="status-indicator"
+                class="status-indicator offline"
+            ></div>
+
 
             <div>
-                <h3 id="status-title">Bot Offline</h3>
-                <p id="status-text">Der aktuelle Status wird geladen...</p>
+
+                <h3 id="status-title">
+                    Bot Offline
+                </h3>
+
+                <p id="status-text">
+                    Der aktuelle Status wird geladen...
+                </p>
+
             </div>
+
         </div>
+
     </section>
 
-    <section id="changelog" class="section">
+
+
+    <!-- ================================= -->
+    <!-- CHANGE LOG -->
+    <!-- ================================= -->
+
+    <section
+        id="changelog"
+        class="section"
+        style="display: none;"
+    >
+
         <div class="section-title">
-            <span>UPDATES</span>
-            <h2>Change Log</h2>
+
+            <span>
+                UPDATES
+            </span>
+
+            <h2>
+                Change Log
+            </h2>
+
         </div>
 
-        <div id="changelog-list" class="changelog-list">
-            <div class="loading">
-                Change Log wird geladen...
-            </div>
-        </div>
+
+        <div
+            id="changelog-list"
+            class="changelog-list"
+        ></div>
+
     </section>
 
-    <section id="commands" class="section">
+
+
+    <!-- ================================= -->
+    <!-- BOT BEFEHLE -->
+    <!-- ================================= -->
+
+    <section
+        id="commands"
+        class="section"
+    >
+
         <div class="section-title">
-            <span>DISCORD</span>
-            <h2>Bot Befehle</h2>
+
+            <span>
+                DISCORD
+            </span>
+
+            <h2>
+                Bot Befehle
+            </h2>
+
         </div>
 
-        <div id="commands-list" class="commands-grid">
+
+        <div
+            id="commands-list"
+            class="commands-grid"
+        >
+
             <div class="loading">
                 Befehle werden geladen...
             </div>
+
         </div>
+
     </section>
+
 
 </main>
 
+
+
+<!-- ================================= -->
+<!-- FOOTER -->
+<!-- ================================= -->
+
 <footer>
-    <p>© 2026 KavKaz Bot</p>
-    <p>Discord Bot &amp; Status System</p>
+
+    <p>
+        © 2026 KavKaz Bot
+    </p>
+
+    <p>
+        Discord Bot &amp; Status System
+    </p>
+
 </footer>
+
+
 
 <script src="script.js"></script>
 
+
+
 <script>
 
+
 const COMMANDS_API =
-    "https://script.google.com/macros/s/AKfycbxj4MyQARTi7sUlHtZHX8Wq6cIX19jJlh596LmJiCdBt49EYwhiG4UK1-bdIwR8ZI1s/exec";
+    "https://script.google.com/macros/s/AKfycbxj4MyQARTi7sUlHtZHX8Wq6cIX19jLlh596LmJiCdBt49EYwhiG4UK1-bdIwR8ZI1s/exec";
 
 
-// ===============================
+// ========================================
 // BOT BEFEHLE LADEN
-// ===============================
+// ========================================
 
 async function loadCommands() {
 
-    const container = document.getElementById("commands-list");
+    const container =
+        document.getElementById(
+            "commands-list"
+        );
+
 
     if (!container) {
         return;
     }
+
 
     try {
 
-        const response = await fetch(
-            COMMANDS_API + "?action=commands"
-        );
+        const response =
+            await fetch(
+                COMMANDS_API +
+                "?action=commands"
+            );
+
 
         if (!response.ok) {
-            throw new Error("Fehler beim Laden der Befehle");
+
+            throw new Error(
+                "Fehler beim Laden der Befehle"
+            );
+
         }
 
-        const data = await response.json();
+
+        const data =
+            await response.json();
+
 
         if (!data.success) {
+
             throw new Error(
-                data.message || "Befehle konnten nicht geladen werden"
+                data.message ||
+                "Befehle konnten nicht geladen werden"
             );
+
         }
 
-        const commands = Array.isArray(data.commands)
-            ? data.commands
-            : [];
 
-        renderCommands(commands);
+        const commands =
+            Array.isArray(data.commands)
+                ? data.commands
+                : [];
+
+
+        renderCommands(
+            commands
+        );
+
 
     } catch (error) {
 
-        console.error("Fehler beim Laden der Befehle:", error);
+        console.error(
+            "Fehler beim Laden der Befehle:",
+            error
+        );
+
 
         container.innerHTML = `
+
             <div class="loading">
+
                 Befehle konnten nicht geladen werden.
+
             </div>
+
         `;
+
     }
+
 }
 
 
-// ===============================
+// ========================================
 // BEFEHLE ANZEIGEN
-// ===============================
+// ========================================
 
 function renderCommands(commands) {
 
-    const container = document.getElementById("commands-list");
+    const container =
+        document.getElementById(
+            "commands-list"
+        );
+
 
     if (!container) {
         return;
     }
 
+
     container.innerHTML = "";
+
 
     if (commands.length === 0) {
 
         container.innerHTML = `
+
             <div class="loading">
+
                 Aktuell sind keine Befehle eingetragen.
+
             </div>
+
         `;
 
         return;
+
     }
 
 
-    commands.forEach(command => {
+    commands.forEach(
+        command => {
 
-        const card = document.createElement("div");
-        card.className = "command-card";
-
-
-        // ===============================
-        // STATUS
-        // ===============================
-
-        let statusText = "Aktiv";
-        let statusIcon = "🟢";
-        let statusClass = "active";
+            const card =
+                document.createElement(
+                    "div"
+                );
 
 
-        if (command.status === "maintenance") {
+            card.className =
+                "command-card";
 
-            statusText = "Wartung";
-            statusIcon = "🟠";
-            statusClass = "maintenance";
 
-        } else if (command.status === "disabled") {
+            // ========================================
+            // STATUS
+            // ========================================
 
-            statusText = "Deaktiviert";
-            statusIcon = "🔴";
-            statusClass = "disabled";
+            let statusText =
+                "Aktiv";
+
+            let statusIcon =
+                "🟢";
+
+            let statusClass =
+                "active";
+
+
+            if (
+                command.status ===
+                "maintenance"
+            ) {
+
+                statusText =
+                    "Wartung";
+
+                statusIcon =
+                    "🟠";
+
+                statusClass =
+                    "maintenance";
+
+            }
+
+            else if (
+                command.status ===
+                "disabled"
+            ) {
+
+                statusText =
+                    "Deaktiviert";
+
+                statusIcon =
+                    "🔴";
+
+                statusClass =
+                    "disabled";
+
+            }
+
+
+            // ========================================
+            // BEFEHL
+            // ========================================
+
+            const commandName =
+                document.createElement(
+                    "div"
+                );
+
+
+            commandName.className =
+                "command";
+
+
+            commandName.textContent =
+                command.name ||
+                "Unbekannter Befehl";
+
+
+            // ========================================
+            // BESCHREIBUNG
+            // ========================================
+
+            const description =
+                document.createElement(
+                    "p"
+                );
+
+
+            description.textContent =
+                command.description ||
+                "Keine Beschreibung vorhanden.";
+
+
+            // ========================================
+            // STATUS BADGE
+            // ========================================
+
+            const status =
+                document.createElement(
+                    "div"
+                );
+
+
+            status.className =
+                "command-status " +
+                statusClass;
+
+
+            status.textContent =
+                statusIcon +
+                " " +
+                statusText;
+
+
+            // ========================================
+            // ZUSAMMENBAUEN
+            // ========================================
+
+            card.appendChild(
+                commandName
+            );
+
+
+            card.appendChild(
+                description
+            );
+
+
+            card.appendChild(
+                status
+            );
+
+
+            container.appendChild(
+                card
+            );
 
         }
-
-
-        // ===============================
-        // BEFEHL
-        // ===============================
-
-        const commandName = document.createElement("div");
-        commandName.className = "command";
-        commandName.textContent = command.name || "Unbekannter Befehl";
-
-
-        // ===============================
-        // BESCHREIBUNG
-        // ===============================
-
-        const description = document.createElement("p");
-        description.textContent =
-            command.description || "Keine Beschreibung vorhanden.";
-
-
-        // ===============================
-        // STATUS BADGE
-        // ===============================
-
-        const status = document.createElement("div");
-        status.className = "command-status " + statusClass;
-        status.textContent = statusIcon + " " + statusText;
-
-
-        // ===============================
-        // ZUSAMMENBAUEN
-        // ===============================
-
-        card.appendChild(commandName);
-        card.appendChild(description);
-        card.appendChild(status);
-
-        container.appendChild(card);
-
-    });
+    );
 
 }
 
 
-// ===============================
+// ========================================
 // BEFEHLE BEIM START LADEN
-// ===============================
+// ========================================
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
-    loadCommands();
+        loadCommands();
 
-});
+    }
+);
+
 
 </script>
 
+
 </body>
+
 </html>
