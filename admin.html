@@ -111,7 +111,8 @@
         }
 
         input,
-        textarea {
+        textarea,
+        select {
             width: 100%;
             background: #090b10;
             color: white;
@@ -123,13 +124,18 @@
             margin-bottom: 18px;
         }
 
+        select {
+            cursor: pointer;
+        }
+
         textarea {
             min-height: 250px;
             resize: vertical;
         }
 
         input:focus,
-        textarea:focus {
+        textarea:focus,
+        select:focus {
             border-color: #7d8cff;
         }
 
@@ -185,10 +191,152 @@
             display: none;
         }
 
+        /* ========================================
+           BEFEHLSVERWALTUNG
+        ======================================== */
+
+        .command-form {
+            border: 1px solid #252a34;
+            background: #0c0f15;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .command-form h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .command-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .secondary-button {
+            border: 1px solid #303641;
+            background: #181c24;
+            color: white;
+            padding: 14px 22px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .secondary-button:hover {
+            background: #242a35;
+        }
+
+        .command-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .command-item {
+            background: #0c0f15;
+            border: 1px solid #252a34;
+            border-radius: 12px;
+            padding: 18px;
+        }
+
+        .command-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .command-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 7px;
+        }
+
+        .command-description {
+            color: #8d94a1;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .command-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .command-action {
+            border: 1px solid #303641;
+            background: #181c24;
+            color: white;
+            padding: 9px 13px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .command-action:hover {
+            background: #242a35;
+        }
+
+        .command-action.delete {
+            background: rgba(239, 68, 68, 0.10);
+            border-color: rgba(239, 68, 68, 0.30);
+            color: #f87171;
+        }
+
+        .command-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .command-status.active {
+            background: rgba(34, 197, 94, 0.12);
+            color: #4ade80;
+        }
+
+        .command-status.maintenance {
+            background: rgba(249, 115, 22, 0.12);
+            color: #fb923c;
+        }
+
+        .command-status.disabled {
+            background: rgba(239, 68, 68, 0.12);
+            color: #f87171;
+        }
+
+        .empty-commands {
+            color: #8d94a1;
+            text-align: center;
+            padding: 25px;
+            border: 1px dashed #303641;
+            border-radius: 10px;
+        }
+
+        .command-mode {
+            color: #8d94a1;
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
         @media (max-width: 700px) {
 
             .status-buttons {
                 grid-template-columns: 1fr;
+            }
+
+            .command-top {
+                flex-direction: column;
+            }
+
+            .command-actions {
+                width: 100%;
             }
 
         }
@@ -313,7 +461,9 @@
         </div>
 
 
-        <!-- BOT STATUS -->
+        <!-- ========================================
+             BOT STATUS
+        ======================================== -->
 
         <div class="admin-card">
 
@@ -381,7 +531,141 @@
         </div>
 
 
-        <!-- CHANGE LOG -->
+        <!-- ========================================
+             BEFEHLE
+        ======================================== -->
+
+        <div class="admin-card">
+
+            <h2>
+                Bot-Befehle verwalten
+            </h2>
+
+
+            <p class="hint">
+
+                Hier kannst du die Befehle verwalten, die auf
+                der öffentlichen KavKaz-Website angezeigt werden.
+                Diese Verwaltung ändert nicht automatisch die
+                Discord-Befehle des Bots.
+
+            </p>
+
+
+            <div class="command-form">
+
+                <h3 id="command-form-title">
+                    ➕ Neuen Befehl hinzufügen
+                </h3>
+
+
+                <div
+                    id="command-mode"
+                    class="command-mode"
+                >
+                    Erstelle einen neuen Eintrag für die Website.
+                </div>
+
+
+                <label for="command-name">
+                    Befehl
+                </label>
+
+
+                <input
+                    id="command-name"
+                    type="text"
+                    placeholder="z.B. /kick"
+                    maxlength="50"
+                >
+
+
+                <label for="command-description">
+                    Beschreibung
+                </label>
+
+
+                <input
+                    id="command-description"
+                    type="text"
+                    placeholder="z.B. Entfernt einen Benutzer vom Server."
+                    maxlength="200"
+                >
+
+
+                <label for="command-status">
+                    Status
+                </label>
+
+
+                <select id="command-status">
+
+                    <option value="active">
+                        🟢 Aktiv
+                    </option>
+
+                    <option value="maintenance">
+                        🟠 Wartung
+                    </option>
+
+                    <option value="disabled">
+                        🔴 Deaktiviert
+                    </option>
+
+                </select>
+
+
+                <div class="command-buttons">
+
+                    <button
+                        id="save-command"
+                        class="admin-button"
+                    >
+                        💾 Befehl speichern
+                    </button>
+
+
+                    <button
+                        id="cancel-command-edit"
+                        class="secondary-button"
+                        style="display:none;"
+                    >
+                        Abbrechen
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="command-result"
+                    class="message"
+                ></div>
+
+            </div>
+
+
+            <h3>
+                Vorhandene Befehle
+            </h3>
+
+
+            <div
+                id="command-list"
+                class="command-list"
+            >
+
+                <div class="empty-commands">
+                    Befehle werden geladen...
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ========================================
+             CHANGE LOG
+        ======================================== -->
 
         <div class="admin-card">
 
@@ -476,6 +760,11 @@ let session =
     );
 
 
+let commands = [];
+
+let editingCommandId = null;
+
+
 // ========================================
 // LOGIN
 // ========================================
@@ -517,10 +806,6 @@ function login() {
 
     }
 
-
-    // ========================================
-    // JSONP CALLBACK
-    // ========================================
 
     const callbackName =
         "kavkazLogin_" +
@@ -579,8 +864,6 @@ function login() {
             }
 
 
-            // Callback wieder entfernen
-
             delete window[callbackName];
 
 
@@ -598,10 +881,6 @@ function login() {
 
         };
 
-
-    // ========================================
-    // SCRIPT ERSTELLEN
-    // ========================================
 
     const script =
         document.createElement(
@@ -672,6 +951,8 @@ function showAdminPanel() {
 
 
     loadStatus();
+
+    loadCommands();
 
 }
 
@@ -1087,6 +1368,11 @@ async function loadStatus() {
         statusButtons.forEach(
             button => {
 
+                button.classList.remove(
+                    "selected"
+                );
+
+
                 if (
                     button.dataset.status ===
                     selectedStatus
@@ -1124,6 +1410,751 @@ async function loadStatus() {
     }
 
 }
+
+
+// ========================================
+// BEFEHLE LADEN
+// ========================================
+
+async function loadCommands() {
+
+    const list =
+        document.getElementById(
+            "command-list"
+        );
+
+
+    list.innerHTML =
+        '<div class="empty-commands">Befehle werden geladen...</div>';
+
+
+    try {
+
+        const response =
+            await fetch(
+
+                API_URL +
+                "?action=commands"
+
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            result.success === false
+        ) {
+
+            throw new Error(
+
+                result.error ||
+                "Befehle konnten nicht geladen werden."
+
+            );
+
+        }
+
+
+        commands =
+            Array.isArray(result.commands)
+                ? result.commands
+                : [];
+
+
+        renderCommands();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        list.innerHTML =
+            '<div class="empty-commands">❌ Befehle konnten nicht geladen werden.</div>';
+
+    }
+
+}
+
+
+// ========================================
+// BEFEHLE ANZEIGEN
+// ========================================
+
+function renderCommands() {
+
+    const list =
+        document.getElementById(
+            "command-list"
+        );
+
+
+    if (!commands.length) {
+
+        list.innerHTML =
+            '<div class="empty-commands">Noch keine Befehle vorhanden.</div>';
+
+        return;
+
+    }
+
+
+    list.innerHTML = "";
+
+
+    commands.forEach(
+        command => {
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "command-item";
+
+
+            let statusText =
+                "🟢 Aktiv";
+
+            let statusClass =
+                "active";
+
+
+            if (
+                command.status ===
+                "maintenance"
+            ) {
+
+                statusText =
+                    "🟠 Wartung";
+
+                statusClass =
+                    "maintenance";
+
+            }
+
+
+            if (
+                command.status ===
+                "disabled"
+            ) {
+
+                statusText =
+                    "🔴 Deaktiviert";
+
+                statusClass =
+                    "disabled";
+
+            }
+
+
+            item.innerHTML = `
+
+                <div class="command-top">
+
+                    <div>
+
+                        <div class="command-name">
+                            ${escapeHtml(command.name || "")}
+                        </div>
+
+                        <div class="command-description">
+                            ${escapeHtml(command.description || "")}
+                        </div>
+
+                        <span class="command-status ${statusClass}">
+                            ${statusText}
+                        </span>
+
+                    </div>
+
+
+                    <div class="command-actions">
+
+                        <button
+                            class="command-action"
+                            onclick="editCommand('${escapeJs(command.id)}')"
+                        >
+                            ✏️ Bearbeiten
+                        </button>
+
+                        <button
+                            class="command-action delete"
+                            onclick="deleteCommand('${escapeJs(command.id)}')"
+                        >
+                            🗑️ Löschen
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+            list.appendChild(item);
+
+        }
+    );
+
+}
+
+
+// ========================================
+// HTML SICHER MACHEN
+// ========================================
+
+function escapeHtml(text) {
+
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+function escapeJs(text) {
+
+    return String(text)
+        .replace(/\\/g, "\\\\")
+        .replace(/'/g, "\\'");
+
+}
+
+
+// ========================================
+// BEFEHL SPEICHERN
+// ========================================
+
+async function saveCommand() {
+
+    const name =
+        document
+            .getElementById(
+                "command-name"
+            )
+            .value
+            .trim();
+
+
+    const description =
+        document
+            .getElementById(
+                "command-description"
+            )
+            .value
+            .trim();
+
+
+    const status =
+        document
+            .getElementById(
+                "command-status"
+            )
+            .value;
+
+
+    if (!name) {
+
+        showMessage(
+
+            document.getElementById(
+                "command-result"
+            ),
+
+            "❌ Bitte einen Befehlsnamen eingeben.",
+
+            "error"
+
+        );
+
+        return;
+
+    }
+
+
+    if (!description) {
+
+        showMessage(
+
+            document.getElementById(
+                "command-result"
+            ),
+
+            "❌ Bitte eine Beschreibung eingeben.",
+
+            "error"
+
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+
+                API_URL,
+
+                {
+
+                    method:
+                        "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/x-www-form-urlencoded"
+
+                    },
+
+                    body:
+                        new URLSearchParams({
+
+                            action:
+                                "saveCommand",
+
+                            id:
+                                editingCommandId || "",
+
+                            name:
+                                name,
+
+                            description:
+                                description,
+
+                            status:
+                                status,
+
+                            session:
+                                session
+
+                        })
+
+                }
+
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            result.success === false
+        ) {
+
+            if (
+                result.error ===
+                "Nicht angemeldet."
+            ) {
+
+                logout();
+
+                return;
+
+            }
+
+
+            throw new Error(
+
+                result.error ||
+
+                "Befehl konnte nicht gespeichert werden."
+
+            );
+
+        }
+
+
+        showMessage(
+
+            document.getElementById(
+                "command-result"
+            ),
+
+            editingCommandId
+                ? "✅ Befehl wurde geändert."
+                : "✅ Befehl wurde hinzugefügt.",
+
+            "success"
+
+        );
+
+
+        resetCommandForm();
+
+
+        await loadCommands();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        showMessage(
+
+            document.getElementById(
+                "command-result"
+            ),
+
+            "❌ Fehler: " +
+                error.message,
+
+            "error"
+
+        );
+
+    }
+
+}
+
+
+// ========================================
+// BEFEHL BEARBEITEN
+// ========================================
+
+function editCommand(id) {
+
+    const command =
+        commands.find(
+            item =>
+                String(item.id) ===
+                String(id)
+        );
+
+
+    if (!command) {
+
+        return;
+
+    }
+
+
+    editingCommandId =
+        command.id;
+
+
+    document
+        .getElementById(
+            "command-form-title"
+        )
+        .textContent =
+        "✏️ Befehl bearbeiten";
+
+
+    document
+        .getElementById(
+            "command-mode"
+        )
+        .textContent =
+        "Bearbeite den ausgewählten Befehl.";
+
+
+    document
+        .getElementById(
+            "command-name"
+        )
+        .value =
+        command.name || "";
+
+
+    document
+        .getElementById(
+            "command-description"
+        )
+        .value =
+        command.description || "";
+
+
+    document
+        .getElementById(
+            "command-status"
+        )
+        .value =
+        command.status || "active";
+
+
+    document
+        .getElementById(
+            "save-command"
+        )
+        .textContent =
+        "💾 Änderungen speichern";
+
+
+    document
+        .getElementById(
+            "cancel-command-edit"
+        )
+        .style.display =
+        "inline-block";
+
+
+    document
+        .getElementById(
+            "command-result"
+        )
+        .className =
+        "message";
+
+
+    document
+        .getElementById(
+            "command-name"
+        )
+        .focus();
+
+}
+
+
+// ========================================
+// BEARBEITUNG ABBRECHEN
+// ========================================
+
+function resetCommandForm() {
+
+    editingCommandId =
+        null;
+
+
+    document
+        .getElementById(
+            "command-form-title"
+        )
+        .textContent =
+        "➕ Neuen Befehl hinzufügen";
+
+
+    document
+        .getElementById(
+            "command-mode"
+        )
+        .textContent =
+        "Erstelle einen neuen Eintrag für die Website.";
+
+
+    document
+        .getElementById(
+            "command-name"
+        )
+        .value =
+        "";
+
+
+    document
+        .getElementById(
+            "command-description"
+        )
+        .value =
+        "";
+
+
+    document
+        .getElementById(
+            "command-status"
+        )
+        .value =
+        "active";
+
+
+    document
+        .getElementById(
+            "save-command"
+        )
+        .textContent =
+        "💾 Befehl speichern";
+
+
+    document
+        .getElementById(
+            "cancel-command-edit"
+        )
+        .style.display =
+        "none";
+
+}
+
+
+// ========================================
+// BEFEHL LÖSCHEN
+// ========================================
+
+async function deleteCommand(id) {
+
+    const command =
+        commands.find(
+            item =>
+                String(item.id) ===
+                String(id)
+        );
+
+
+    if (!command) {
+
+        return;
+
+    }
+
+
+    const confirmed =
+        confirm(
+
+            "Möchtest du den Befehl \"" +
+            command.name +
+            "\" wirklich löschen?"
+
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+
+                API_URL,
+
+                {
+
+                    method:
+                        "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/x-www-form-urlencoded"
+
+                    },
+
+                    body:
+                        new URLSearchParams({
+
+                            action:
+                                "deleteCommand",
+
+                            id:
+                                id,
+
+                            session:
+                                session
+
+                        })
+
+                }
+
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            result.success === false
+        ) {
+
+            if (
+                result.error ===
+                "Nicht angemeldet."
+            ) {
+
+                logout();
+
+                return;
+
+            }
+
+
+            throw new Error(
+
+                result.error ||
+
+                "Befehl konnte nicht gelöscht werden."
+
+            );
+
+        }
+
+
+        if (
+            String(editingCommandId) ===
+            String(id)
+        ) {
+
+            resetCommandForm();
+
+        }
+
+
+        await loadCommands();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        showMessage(
+
+            document.getElementById(
+                "command-result"
+            ),
+
+            "❌ Fehler: " +
+                error.message,
+
+            "error"
+
+        );
+
+    }
+
+}
+
+
+// ========================================
+// BUTTONS
+// ========================================
+
+document
+    .getElementById(
+        "save-command"
+    )
+    .addEventListener(
+        "click",
+        saveCommand
+    );
+
+
+document
+    .getElementById(
+        "cancel-command-edit"
+    )
+    .addEventListener(
+        "click",
+        resetCommandForm
+    );
 
 
 // ========================================
