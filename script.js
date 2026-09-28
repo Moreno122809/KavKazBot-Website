@@ -14,101 +14,77 @@ const DEFAULT_STATUS = {
 
 
 // ========================================
-// BOT STATUS ANZEIGEN
+// STATUS ANZEIGEN
 // ========================================
 
 function setStatus(statusData) {
 
     const indicator =
-        document.getElementById("status-indicator");
+        document.getElementById(
+            "status-indicator"
+        );
 
     const title =
-        document.getElementById("status-title");
+        document.getElementById(
+            "status-title"
+        );
 
     const text =
-        document.getElementById("status-text");
+        document.getElementById(
+            "status-text"
+        );
 
 
     if (!indicator || !title || !text) {
+
         return;
+
     }
+
+
+    const status =
+        statusData.status ||
+        "offline";
 
 
     indicator.className =
-        "status-indicator";
+        "status-indicator " +
+        status;
 
 
-    if (statusData.status === "online") {
+    title.textContent =
+        statusData.title ||
+        getStatusTitle(status);
 
-        indicator.classList.add("online");
 
-        title.textContent =
-            "Bot Online";
-
-        text.textContent =
-            statusData.text ||
-            "Der Bot ist online und funktioniert.";
-
-    }
-
-    else if (statusData.status === "maintenance") {
-
-        indicator.classList.add("maintenance");
-
-        title.textContent =
-            "Wartungsarbeiten";
-
-        text.textContent =
-            statusData.text ||
-            "Der Bot befindet sich momentan in Wartungsarbeiten.";
-
-    }
-
-    else {
-
-        indicator.classList.add("offline");
-
-        title.textContent =
-            "Bot Offline";
-
-        text.textContent =
-            statusData.text ||
-            "Der Bot ist derzeit offline.";
-
-    }
+    text.textContent =
+        statusData.text ||
+        "Der aktuelle Status ist nicht verfügbar.";
 
 }
 
 
 // ========================================
-// CHANGE LOG BEREICH EIN-/AUSBLENDEN
+// STATUS TITEL
 // ========================================
 
-function setChangelogVisibility(visible) {
+function getStatusTitle(status) {
 
-    const section =
-        document.getElementById("changelog");
+    if (status === "online") {
 
-    const navLink =
-        document.querySelector(
-            'nav a[href="#changelog"]'
-        );
-
-
-    if (section) {
-
-        section.style.display =
-            visible ? "" : "none";
+        return "Bot Online";
 
     }
 
 
-    if (navLink) {
+    if (status === "maintenance") {
 
-        navLink.style.display =
-            visible ? "" : "none";
+        return "Wartungsarbeiten";
 
     }
+
+
+    return "Bot Offline";
 
 }
 
@@ -117,14 +93,30 @@ function setChangelogVisibility(visible) {
 // CHANGE LOG ANZEIGEN
 // ========================================
 
-function displayChangelog(entries) {
+function displayChangelog(changelog) {
+
+    const section =
+        document.getElementById(
+            "changelog"
+        );
+
 
     const list =
-        document.getElementById("changelog-list");
+        document.getElementById(
+            "changelog-list"
+        );
 
 
-    if (!list) {
+    const navLink =
+        document.getElementById(
+            "changelog-nav-link"
+        );
+
+
+    if (!section || !list) {
+
         return;
+
     }
 
 
@@ -133,12 +125,22 @@ function displayChangelog(entries) {
     // ========================================
 
     if (
-        !entries ||
-        !Array.isArray(entries) ||
-        entries.length === 0
+        !changelog ||
+        !changelog.text ||
+        !changelog.text.trim()
     ) {
 
-        setChangelogVisibility(false);
+        section.style.display =
+            "none";
+
+
+        if (navLink) {
+
+            navLink.style.display =
+                "none";
+
+        }
+
 
         return;
 
@@ -146,48 +148,112 @@ function displayChangelog(entries) {
 
 
     // ========================================
-    // NUR DEN NEUESTEN EINTRAG VERWENDEN
+    // CHANGE LOG VORHANDEN
     // ========================================
 
-    const latestEntry =
-        entries[entries.length - 1];
+    section.style.display =
+        "block";
 
 
-    if (!latestEntry) {
+    if (navLink) {
 
-        setChangelogVisibility(false);
-
-        return;
+        navLink.style.display =
+            "inline-block";
 
     }
 
 
-    // ========================================
-    // CHANGE LOG SICHTBAR MACHEN
-    // ========================================
-
-    setChangelogVisibility(true);
-
-
-    list.innerHTML = "";
+    const title =
+        escapeHtml(
+            changelog.title ||
+            "Change Log"
+        );
 
 
-    const item =
-        document.createElement("div");
+    const date =
+        escapeHtml(
+            changelog.date ||
+            ""
+        );
 
 
-    item.className =
-        "changelog-entry";
+    const text =
+        formatChangelogText(
+            changelog.text
+        );
 
 
-    item.innerHTML = `
-        <h3>${escapeHtml(latestEntry.title)}</h3>
-        <div class="date">${escapeHtml(latestEntry.date)}</div>
-        <p>${escapeHtml(latestEntry.text)}</p>
+    list.innerHTML = `
+
+        <div class="changelog-item">
+
+            <div class="changelog-top">
+
+                <h3>
+                    ${title}
+                </h3>
+
+                ${
+                    date
+                        ? `
+                            <span class="changelog-date">
+                                ${date}
+                            </span>
+                          `
+                        : ""
+                }
+
+            </div>
+
+            <div class="changelog-text">
+                ${text}
+            </div>
+
+        </div>
+
     `;
 
+}
 
-    list.appendChild(item);
+
+// ========================================
+// CHANGE LOG TEXT FORMATIEREN
+// ========================================
+
+function formatChangelogText(text) {
+
+    let result =
+        escapeHtml(
+            String(text)
+        );
+
+
+    // ========================================
+    // **FETT**
+    // ========================================
+
+    result =
+        result.replace(
+
+            /\*\*(.*?)\*\*/g,
+
+            "<strong>$1</strong>"
+
+        );
+
+
+    // ========================================
+    // ZEILENUMBRÜCHE
+    // ========================================
+
+    result =
+        result.replace(
+            /\r?\n/g,
+            "<br>"
+        );
+
+
+    return result;
 
 }
 
@@ -198,15 +264,32 @@ function displayChangelog(entries) {
 
 function escapeHtml(text) {
 
-    const div =
-        document.createElement("div");
+    return String(text)
 
+        .replace(
+            /&/g,
+            "&amp;"
+        )
 
-    div.textContent =
-        text || "";
+        .replace(
+            /</g,
+            "&lt;"
+        )
 
+        .replace(
+            />/g,
+            "&gt;"
+        )
 
-    return div.innerHTML;
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
@@ -221,7 +304,10 @@ async function loadStatus() {
 
         const response =
             await fetch(
-                API_URL + "?action=status"
+
+                API_URL +
+                "?action=status"
+
             );
 
 
@@ -234,17 +320,34 @@ async function loadStatus() {
         }
 
 
-        const status =
+        const data =
             await response.json();
 
 
-        setStatus(status);
+        setStatus({
+
+            status:
+                data.status ||
+                DEFAULT_STATUS.status,
+
+            title:
+                data.title ||
+                getStatusTitle(
+                    data.status ||
+                    DEFAULT_STATUS.status
+                ),
+
+            text:
+                data.text ||
+                DEFAULT_STATUS.text
+
+        });
 
 
     } catch (error) {
 
         console.error(
-            "Fehler beim Laden des Bot-Status:",
+            "Status konnte nicht geladen werden:",
             error
         );
 
@@ -259,66 +362,74 @@ async function loadStatus() {
 
 
 // ========================================
-// CHANGE LOG AUS LOCAL STORAGE LADEN
+// CHANGE LOG LADEN
 // ========================================
 
-function loadLocalChangelog() {
+async function loadChangelog() {
 
     try {
 
-        const savedChangelog =
-            localStorage.getItem(
-                "kavkaz_changelog"
+        const response =
+            await fetch(
+
+                API_URL +
+                "?action=changelog"
+
             );
 
 
-        // ========================================
-        // KEIN CHANGE LOG GESPEICHERT
-        // ========================================
+        if (!response.ok) {
 
-        if (!savedChangelog) {
-
-            displayChangelog([]);
-
-            return;
-
-        }
-
-
-        const changelog =
-            JSON.parse(
-                savedChangelog
-            );
-
-
-        // ========================================
-        // CHANGE LOG ANZEIGEN
-        // ========================================
-
-        if (Array.isArray(changelog)) {
-
-            displayChangelog(
-                changelog
+            throw new Error(
+                "Change Log konnte nicht geladen werden."
             );
 
         }
 
-        else {
 
-            displayChangelog([]);
+        const result =
+            await response.json();
+
+
+        if (
+            !result ||
+            result.success === false
+        ) {
+
+            throw new Error(
+
+                result &&
+                result.error
+
+                    ? result.error
+
+                    : "Change Log konnte nicht geladen werden."
+
+            );
 
         }
+
+
+        displayChangelog(
+            result.changelog ||
+            null
+        );
 
 
     } catch (error) {
 
         console.error(
-            "Fehler beim Laden des Change Logs:",
+            "Change Log konnte nicht geladen werden:",
             error
         );
 
 
-        displayChangelog([]);
+        // Bei Fehlern wird der Bereich
+        // sicherheitshalber ausgeblendet.
+
+        displayChangelog(
+            null
+        );
 
     }
 
@@ -326,22 +437,19 @@ function loadLocalChangelog() {
 
 
 // ========================================
-// SEITE STARTEN
+// START
 // ========================================
 
 document.addEventListener(
+
     "DOMContentLoaded",
+
     () => {
-
-        // Change Log zunächst verstecken,
-        // damit kein leerer Bereich erscheint.
-
-        setChangelogVisibility(false);
-
 
         loadStatus();
 
-        loadLocalChangelog();
+        loadChangelog();
 
     }
+
 );
