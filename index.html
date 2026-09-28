@@ -1,4 +1,3 @@
-@'
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -68,33 +67,10 @@
             <h2>Bot Befehle</h2>
         </div>
 
-        <div class="commands-grid">
-
-            <div class="command-card">
-                <div class="command">/kick</div>
-                <p>Entfernt einen Benutzer vom Server.</p>
+        <div id="commands-list" class="commands-grid">
+            <div class="loading">
+                Befehle werden geladen...
             </div>
-
-            <div class="command-card">
-                <div class="command">/ban</div>
-                <p>Bannt einen Benutzer vom Server.</p>
-            </div>
-
-            <div class="command-card">
-                <div class="command">/timeout</div>
-                <p>Gibt einem Benutzer einen Timeout.</p>
-            </div>
-
-            <div class="command-card">
-                <div class="command">/clearall</div>
-                <p>Löscht Nachrichten aus einem Kanal.</p>
-            </div>
-
-            <div class="command-card">
-                <div class="command">/bun</div>
-                <p>Zeigt die entsprechende Bot-Funktion an.</p>
-            </div>
-
         </div>
     </section>
 
@@ -107,6 +83,170 @@
 
 <script src="script.js"></script>
 
+<script>
+
+const COMMANDS_API =
+    "https://script.google.com/macros/s/AKfycbxj4MyQARTi7sUlHtZHX8Wq6cIX19jJlh596LmJiCdBt49EYwhiG4UK1-bdIwR8ZI1s/exec";
+
+
+// ===============================
+// BOT BEFEHLE LADEN
+// ===============================
+
+async function loadCommands() {
+
+    const container = document.getElementById("commands-list");
+
+    if (!container) {
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            COMMANDS_API + "?action=commands"
+        );
+
+        if (!response.ok) {
+            throw new Error("Fehler beim Laden der Befehle");
+        }
+
+        const data = await response.json();
+
+        if (!data.success) {
+            throw new Error(
+                data.message || "Befehle konnten nicht geladen werden"
+            );
+        }
+
+        const commands = Array.isArray(data.commands)
+            ? data.commands
+            : [];
+
+        renderCommands(commands);
+
+    } catch (error) {
+
+        console.error("Fehler beim Laden der Befehle:", error);
+
+        container.innerHTML = `
+            <div class="loading">
+                Befehle konnten nicht geladen werden.
+            </div>
+        `;
+    }
+}
+
+
+// ===============================
+// BEFEHLE ANZEIGEN
+// ===============================
+
+function renderCommands(commands) {
+
+    const container = document.getElementById("commands-list");
+
+    if (!container) {
+        return;
+    }
+
+    container.innerHTML = "";
+
+    if (commands.length === 0) {
+
+        container.innerHTML = `
+            <div class="loading">
+                Aktuell sind keine Befehle eingetragen.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    commands.forEach(command => {
+
+        const card = document.createElement("div");
+        card.className = "command-card";
+
+
+        // ===============================
+        // STATUS
+        // ===============================
+
+        let statusText = "Aktiv";
+        let statusIcon = "🟢";
+        let statusClass = "active";
+
+
+        if (command.status === "maintenance") {
+
+            statusText = "Wartung";
+            statusIcon = "🟠";
+            statusClass = "maintenance";
+
+        } else if (command.status === "disabled") {
+
+            statusText = "Deaktiviert";
+            statusIcon = "🔴";
+            statusClass = "disabled";
+
+        }
+
+
+        // ===============================
+        // BEFEHL
+        // ===============================
+
+        const commandName = document.createElement("div");
+        commandName.className = "command";
+        commandName.textContent = command.name || "Unbekannter Befehl";
+
+
+        // ===============================
+        // BESCHREIBUNG
+        // ===============================
+
+        const description = document.createElement("p");
+        description.textContent =
+            command.description || "Keine Beschreibung vorhanden.";
+
+
+        // ===============================
+        // STATUS BADGE
+        // ===============================
+
+        const status = document.createElement("div");
+        status.className = "command-status " + statusClass;
+        status.textContent = statusIcon + " " + statusText;
+
+
+        // ===============================
+        // ZUSAMMENBAUEN
+        // ===============================
+
+        card.appendChild(commandName);
+        card.appendChild(description);
+        card.appendChild(status);
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+// ===============================
+// BEFEHLE BEIM START LADEN
+// ===============================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    loadCommands();
+
+});
+
+</script>
+
 </body>
 </html>
-'@ | Set-Content -Encoding UTF8 .\website\index.html
