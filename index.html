@@ -1,0 +1,112 @@
+@'
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KavKaz Bot – Status</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">KAVKAZ</div>
+
+    <nav>
+        <a href="#status">Status</a>
+        <a href="#changelog">Change Log</a>
+        <a href="#commands">Befehle</a>
+        <a href="admin.html">Admin</a>
+    </nav>
+</header>
+
+<main>
+
+    <section class="hero">
+        <div class="hero-content">
+            <p class="small-title">DISCORD BOT</p>
+            <h1>KavKaz Bot</h1>
+            <p class="description">
+                Status, Updates und Informationen rund um den KavKaz Discord Bot.
+            </p>
+        </div>
+    </section>
+
+    <section id="status" class="section">
+        <div class="section-title">
+            <span>STATUS</span>
+            <h2>Bot Status</h2>
+        </div>
+
+        <div class="status-card">
+            <div id="status-indicator" class="status-indicator offline"></div>
+
+            <div>
+                <h3 id="status-title">Bot Offline</h3>
+                <p id="status-text">Der aktuelle Status wird geladen...</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="changelog" class="section">
+        <div class="section-title">
+            <span>UPDATES</span>
+            <h2>Change Log</h2>
+        </div>
+
+        <div id="changelog-list" class="changelog-list">
+            <div class="loading">
+                Change Log wird geladen...
+            </div>
+        </div>
+    </section>
+
+    <section id="commands" class="section">
+        <div class="section-title">
+            <span>DISCORD</span>
+            <h2>Bot Befehle</h2>
+        </div>
+
+        <div class="commands-grid">
+
+            <div class="command-card">
+                <div class="command">/kick</div>
+                <p>Entfernt einen Benutzer vom Server.</p>
+            </div>
+
+            <div class="command-card">
+                <div class="command">/ban</div>
+                <p>Bannt einen Benutzer vom Server.</p>
+            </div>
+
+            <div class="command-card">
+                <div class="command">/timeout</div>
+                <p>Gibt einem Benutzer einen Timeout.</p>
+            </div>
+
+            <div class="command-card">
+                <div class="command">/clearall</div>
+                <p>Löscht Nachrichten aus einem Kanal.</p>
+            </div>
+
+            <div class="command-card">
+                <div class="command">/bun</div>
+                <p>Zeigt die entsprechende Bot-Funktion an.</p>
+            </div>
+
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <p>© 2026 KavKaz Bot</p>
+    <p>Discord Bot &amp; Status System</p>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
+'@ | Set-Content -Encoding UTF8 .\website\index.html

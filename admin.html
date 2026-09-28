@@ -1,0 +1,549 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KavKaz Bot – Admin</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .admin-container {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 25px;
+        }
+
+        .admin-card {
+            background: #11141b;
+            border: 1px solid #252a34;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+        }
+
+        .admin-card h2 {
+            margin-bottom: 25px;
+        }
+
+        .status-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .status-button {
+            border: 1px solid #303641;
+            background: #181c24;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .status-button:hover {
+            background: #242a35;
+        }
+
+        .status-button.selected {
+            border-color: #7d8cff;
+            background: #202642;
+        }
+
+        label {
+            display: block;
+            color: #aeb4c0;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            background: #090b10;
+            color: white;
+            border: 1px solid #303641;
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 15px;
+            outline: none;
+            margin-bottom: 18px;
+        }
+
+        textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #7d8cff;
+        }
+
+        .admin-button {
+            border: 0;
+            background: #5865f2;
+            color: white;
+            padding: 14px 22px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .admin-button:hover {
+            background: #4752c4;
+        }
+
+        .delete-button {
+            background: #ef4444;
+            margin-top: 15px;
+        }
+
+        .delete-button:hover {
+            background: #dc2626;
+        }
+
+        .message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .message.success {
+            display: block;
+            background: rgba(34, 197, 94, 0.12);
+            color: #4ade80;
+        }
+
+        .message.error {
+            display: block;
+            background: rgba(239, 68, 68, 0.12);
+            color: #f87171;
+        }
+
+        .admin-entry {
+            border: 1px solid #252a34;
+            background: #0c0f14;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .admin-entry h3 {
+            margin-bottom: 8px;
+        }
+
+        .admin-entry .date {
+            color: #7d8cff;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .admin-entry p {
+            color: #aeb4c0;
+            line-height: 1.5;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #8d96ff;
+            text-decoration: none;
+        }
+
+        @media (max-width: 700px) {
+            .status-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">KAVKAZ ADMIN</div>
+
+    <nav>
+        <a href="index.html">Website</a>
+    </nav>
+</header>
+
+<main>
+
+    <div class="admin-container">
+
+        <div class="section-title">
+            <span>ADMIN PANEL</span>
+            <h2>KavKaz Bot Verwaltung</h2>
+        </div>
+
+        <div class="admin-card">
+
+            <h2>Bot Status</h2>
+
+            <div class="status-buttons">
+
+                <button class="status-button" data-status="online">
+                    🟢 Online
+                </button>
+
+                <button class="status-button" data-status="maintenance">
+                    🟠 Wartungsarbeiten
+                </button>
+
+                <button class="status-button" data-status="offline">
+                    🔴 Offline
+                </button>
+
+            </div>
+
+            <br>
+
+            <label for="status-message">
+                Status-Nachricht
+            </label>
+
+            <input
+                id="status-message"
+                type="text"
+                placeholder="z.B. Der Bot läuft problemlos."
+            >
+
+            <button id="save-status" class="admin-button">
+                Status speichern
+            </button>
+
+            <div id="status-result" class="message"></div>
+
+        </div>
+
+
+        <div class="admin-card">
+
+            <h2>Change Log erstellen</h2>
+
+            <label for="changelog-title">
+                Titel
+            </label>
+
+            <input
+                id="changelog-title"
+                type="text"
+                placeholder="z.B. Update 1.4"
+            >
+
+            <label for="changelog-text">
+                Beschreibung
+            </label>
+
+            <textarea
+                id="changelog-text"
+                placeholder="Was wurde geändert?"
+            ></textarea>
+
+            <button id="add-changelog" class="admin-button">
+                Change Log veröffentlichen
+            </button>
+
+            <div id="changelog-result" class="message"></div>
+
+        </div>
+
+
+        <div class="admin-card">
+
+            <h2>Vorhandene Change Logs</h2>
+
+            <div id="admin-changelog-list"></div>
+
+        </div>
+
+        <a class="back-link" href="index.html">
+            ← Zur öffentlichen Website
+        </a>
+
+    </div>
+
+</main>
+
+<script>
+
+let selectedStatus = "offline";
+
+const statusButtons = document.querySelectorAll(".status-button");
+
+statusButtons.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        statusButtons.forEach(btn => {
+            btn.classList.remove("selected");
+        });
+
+        button.classList.add("selected");
+
+        selectedStatus = button.dataset.status;
+
+    });
+
+});
+
+
+function showMessage(element, text, type) {
+
+    element.textContent = text;
+
+    element.className = "message " + type;
+
+}
+
+
+function saveStatus() {
+
+    const message =
+        document.getElementById("status-message").value.trim();
+
+    const data = {
+
+        status: selectedStatus,
+
+        text: message
+
+    };
+
+    localStorage.setItem(
+        "kavkaz_status",
+        JSON.stringify(data)
+    );
+
+    showMessage(
+        document.getElementById("status-result"),
+        "Status wurde gespeichert.",
+        "success"
+    );
+
+}
+
+
+document
+    .getElementById("save-status")
+    .addEventListener("click", saveStatus);
+
+
+function loadStatus() {
+
+    const saved =
+        localStorage.getItem("kavkaz_status");
+
+    if (!saved) return;
+
+    try {
+
+        const data = JSON.parse(saved);
+
+        selectedStatus = data.status || "offline";
+
+        statusButtons.forEach(button => {
+
+            if (button.dataset.status === selectedStatus) {
+                button.classList.add("selected");
+            }
+
+        });
+
+        document.getElementById("status-message").value =
+            data.text || "";
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+}
+
+
+function getChangelog() {
+
+    const saved =
+        localStorage.getItem("kavkaz_changelog");
+
+    if (!saved) return [];
+
+    try {
+
+        return JSON.parse(saved);
+
+    } catch (error) {
+
+        return [];
+
+    }
+
+}
+
+
+function saveChangelog(entries) {
+
+    localStorage.setItem(
+        "kavkaz_changelog",
+        JSON.stringify(entries)
+    );
+
+}
+
+
+function displayAdminChangelog() {
+
+    const list =
+        document.getElementById("admin-changelog-list");
+
+    const entries = getChangelog();
+
+    list.innerHTML = "";
+
+    if (entries.length === 0) {
+
+        list.innerHTML =
+            "<p style='color:#8d94a1'>Noch keine Einträge vorhanden.</p>";
+
+        return;
+
+    }
+
+
+    entries.forEach((entry, index) => {
+
+        const item =
+            document.createElement("div");
+
+        item.className = "admin-entry";
+
+        item.innerHTML = `
+
+            <h3>${escapeHtml(entry.title)}</h3>
+
+            <div class="date">
+                ${escapeHtml(entry.date)}
+            </div>
+
+            <p>
+                ${escapeHtml(entry.text)}
+            </p>
+
+            <button
+                class="admin-button delete-button"
+                onclick="deleteChangelog(${index})">
+                Eintrag löschen
+            </button>
+
+        `;
+
+        list.appendChild(item);
+
+    });
+
+}
+
+
+function addChangelog() {
+
+    const title =
+        document.getElementById("changelog-title").value.trim();
+
+    const text =
+        document.getElementById("changelog-text").value.trim();
+
+
+    if (!title || !text) {
+
+        showMessage(
+            document.getElementById("changelog-result"),
+            "Bitte Titel und Beschreibung eingeben.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const entries = getChangelog();
+
+    const now = new Date();
+
+    const date =
+        now.toLocaleDateString("de-DE");
+
+
+    entries.unshift({
+
+        title: title,
+
+        text: text,
+
+        date: date
+
+    });
+
+
+    saveChangelog(entries);
+
+    document.getElementById("changelog-title").value = "";
+
+    document.getElementById("changelog-text").value = "";
+
+
+    displayAdminChangelog();
+
+
+    showMessage(
+        document.getElementById("changelog-result"),
+        "Change Log wurde veröffentlicht.",
+        "success"
+    );
+
+}
+
+
+document
+    .getElementById("add-changelog")
+    .addEventListener("click", addChangelog);
+
+
+function deleteChangelog(index) {
+
+    const entries = getChangelog();
+
+    entries.splice(index, 1);
+
+    saveChangelog(entries);
+
+    displayAdminChangelog();
+
+}
+
+
+function escapeHtml(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        text || "";
+
+    return div.innerHTML;
+
+}
+
+
+loadStatus();
+displayAdminChangelog();
+
+</script>
+
+</body>
+</html>
