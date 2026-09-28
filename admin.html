@@ -1,12 +1,65 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>KavKaz Bot – Admin</title>
-    <link rel="stylesheet" href="style.css">
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 
     <style>
+
+        .login-container {
+            max-width: 450px;
+            margin: 100px auto;
+            padding: 0 25px;
+        }
+
+        .login-card {
+            background: #11141b;
+            border: 1px solid #252a34;
+            border-radius: 16px;
+            padding: 30px;
+        }
+
+        .login-card h2 {
+            margin-bottom: 10px;
+        }
+
+        .login-card p {
+            color: #8d94a1;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        .login-error {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            background: rgba(239, 68, 68, 0.12);
+            color: #f87171;
+            display: none;
+        }
+
+        .logout-button {
+            margin-left: 10px;
+            background: #303641;
+        }
+
+        .logout-button:hover {
+            background: #3c4451;
+        }
+
         .admin-container {
             max-width: 900px;
             margin: 60px auto;
@@ -128,15 +181,25 @@
             margin-bottom: 15px;
         }
 
+        #admin-panel {
+            display: none;
+        }
+
         @media (max-width: 700px) {
+
             .status-buttons {
                 grid-template-columns: 1fr;
             }
+
         }
+
     </style>
+
 </head>
 
+
 <body>
+
 
 <header>
 
@@ -145,16 +208,97 @@
     </div>
 
     <nav>
+
         <a href="index.html">
             Website
         </a>
+
     </nav>
 
 </header>
 
-<main>
+
+<!-- ========================================
+     LOGIN
+======================================== -->
+
+<div
+    id="login-screen"
+    class="login-container"
+>
+
+    <div class="login-card">
+
+        <div class="section-title">
+
+            <span>
+                ADMIN LOGIN
+            </span>
+
+            <h2>
+                KavKaz Bot Verwaltung
+            </h2>
+
+        </div>
+
+
+        <p>
+            Bitte melde dich an, um auf den Admin-Bereich zuzugreifen.
+        </p>
+
+
+        <label for="username">
+            Benutzername
+        </label>
+
+        <input
+            id="username"
+            type="text"
+            autocomplete="username"
+            placeholder="Benutzername"
+        >
+
+
+        <label for="password">
+            Passwort
+        </label>
+
+        <input
+            id="password"
+            type="password"
+            autocomplete="current-password"
+            placeholder="Passwort"
+        >
+
+
+        <button
+            id="login-button"
+            class="admin-button"
+        >
+            🔐 Einloggen
+        </button>
+
+
+        <div
+            id="login-error"
+            class="login-error"
+        ></div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================
+     ADMIN PANEL
+======================================== -->
+
+<main
+    id="admin-panel"
+>
 
     <div class="admin-container">
+
 
         <div class="section-title">
 
@@ -168,6 +312,7 @@
 
         </div>
 
+
         <!-- BOT STATUS -->
 
         <div class="admin-card">
@@ -175,6 +320,7 @@
             <h2>
                 Bot Status
             </h2>
+
 
             <div class="status-buttons">
 
@@ -185,12 +331,14 @@
                     🟢 Online
                 </button>
 
+
                 <button
                     class="status-button"
                     data-status="maintenance"
                 >
                     🟠 Wartungsarbeiten
                 </button>
+
 
                 <button
                     class="status-button"
@@ -201,17 +349,21 @@
 
             </div>
 
+
             <br>
+
 
             <label for="status-message">
                 Status-Nachricht
             </label>
+
 
             <input
                 id="status-message"
                 type="text"
                 placeholder="z.B. Der Bot läuft problemlos."
             >
+
 
             <button
                 id="save-status"
@@ -220,12 +372,14 @@
                 Status speichern
             </button>
 
+
             <div
                 id="status-result"
                 class="message"
             ></div>
 
         </div>
+
 
         <!-- CHANGE LOG -->
 
@@ -235,15 +389,20 @@
                 Discord Change Log
             </h2>
 
+
             <p class="hint">
+
                 Schreibe hier den kompletten Change Log hinein.
                 Der Text wird direkt als normale Discord-Nachricht
                 in den Change-Log-Kanal gesendet.
+
             </p>
+
 
             <label for="changelog-text">
                 Change Log
             </label>
+
 
             <textarea
                 id="changelog-text"
@@ -256,12 +415,14 @@
 - Fehler behoben."
             ></textarea>
 
+
             <button
                 id="add-changelog"
                 class="admin-button"
             >
                 📢 Change Log veröffentlichen
             </button>
+
 
             <div
                 id="changelog-result"
@@ -270,6 +431,18 @@
 
         </div>
 
+
+        <button
+            id="logout-button"
+            class="admin-button logout-button"
+        >
+            🚪 Ausloggen
+        </button>
+
+
+        <br>
+
+
         <a
             class="back-link"
             href="index.html"
@@ -277,44 +450,244 @@
             ← Zur öffentlichen Website
         </a>
 
+
     </div>
 
 </main>
 
+
 <script>
 
+
 const API_URL =
-    "https://script.google.com/macros/s/AKfycbxj4MyQARTi7sUlHtZHX8Wq6cIX19jJlh596LmJiCdBt49EYwhiG4UK1-bdIwR8ZI1s/exec";
+    "https://script.google.com/macros/s/AKfycbxj4MyQARTi7sUlHtZHX8Wq6cIX19jLjh596LmJiCdBt49EYwhiG4UK1-bdIwR8ZI1s/exec";
 
 
 let selectedStatus = "offline";
 
+let session =
+    sessionStorage.getItem(
+        "kavkaz_admin_session"
+    );
+
+
+// ========================================
+// LOGIN
+// ========================================
+
+async function login() {
+
+    const username =
+        document
+            .getElementById("username")
+            .value
+            .trim();
+
+
+    const password =
+        document
+            .getElementById("password")
+            .value;
+
+
+    const errorBox =
+        document.getElementById(
+            "login-error"
+        );
+
+
+    errorBox.style.display =
+        "none";
+
+
+    if (!username || !password) {
+
+        errorBox.textContent =
+            "❌ Bitte Benutzername und Passwort eingeben.";
+
+        errorBox.style.display =
+            "block";
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL,
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/x-www-form-urlencoded"
+                    },
+
+                    body:
+                        new URLSearchParams({
+
+                            action: "login",
+
+                            username:
+                                username,
+
+                            password:
+                                password
+
+                        })
+
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            result.success === false
+        ) {
+
+            throw new Error(
+                result.error ||
+                "Login fehlgeschlagen."
+            );
+
+        }
+
+
+        session =
+            result.session;
+
+
+        sessionStorage.setItem(
+            "kavkaz_admin_session",
+            session
+        );
+
+
+        showAdminPanel();
+
+
+    } catch (error) {
+
+        errorBox.textContent =
+            "❌ " +
+            error.message;
+
+        errorBox.style.display =
+            "block";
+
+    }
+
+}
+
+
+// ========================================
+// ADMIN PANEL ANZEIGEN
+// ========================================
+
+function showAdminPanel() {
+
+    document
+        .getElementById(
+            "login-screen"
+        )
+        .style.display =
+        "none";
+
+
+    document
+        .getElementById(
+            "admin-panel"
+        )
+        .style.display =
+        "block";
+
+
+    loadStatus();
+
+}
+
+
+// ========================================
+// AUSLOGGEN
+// ========================================
+
+function logout() {
+
+    session = null;
+
+
+    sessionStorage.removeItem(
+        "kavkaz_admin_session"
+    );
+
+
+    location.reload();
+
+}
+
+
+// ========================================
+// STATUS BUTTONS
+// ========================================
 
 const statusButtons =
-    document.querySelectorAll(".status-button");
+    document.querySelectorAll(
+        ".status-button"
+    );
 
 
 statusButtons.forEach(button => {
 
-    button.addEventListener("click", () => {
+    button.addEventListener(
+        "click",
+        () => {
 
-        statusButtons.forEach(btn => {
-            btn.classList.remove("selected");
-        });
+            statusButtons.forEach(
+                btn => {
 
-        button.classList.add("selected");
+                    btn.classList.remove(
+                        "selected"
+                    );
 
-        selectedStatus =
-            button.dataset.status;
+                }
+            );
 
-    });
+
+            button.classList.add(
+                "selected"
+            );
+
+
+            selectedStatus =
+                button.dataset.status;
+
+        }
+    );
 
 });
 
 
-function showMessage(element, text, type) {
+// ========================================
+// NACHRICHT
+// ========================================
 
-    element.textContent = text;
+function showMessage(
+    element,
+    text,
+    type
+) {
+
+    element.textContent =
+        text;
+
 
     element.className =
         "message " + type;
@@ -322,50 +695,77 @@ function showMessage(element, text, type) {
 }
 
 
-/* ================================
-   STATUS SPEICHERN
-================================ */
+// ========================================
+// STATUS SPEICHERN
+// ========================================
 
 async function saveStatus() {
 
     const message =
         document
-            .getElementById("status-message")
+            .getElementById(
+                "status-message"
+            )
             .value
             .trim();
+
 
     try {
 
         const response =
-            await fetch(API_URL, {
+            await fetch(
+                API_URL,
+                {
 
-                method: "POST",
+                    method: "POST",
 
-                headers: {
-                    "Content-Type":
-                        "application/x-www-form-urlencoded"
-                },
+                    headers: {
 
-                body: new URLSearchParams({
+                        "Content-Type":
+                            "application/x-www-form-urlencoded"
 
-                    action: "status",
+                    },
 
-                    status:
-                        selectedStatus,
+                    body:
+                        new URLSearchParams({
 
-                    text:
-                        message
+                            action: "status",
 
-                })
+                            status:
+                                selectedStatus,
 
-            });
+                            text:
+                                message,
+
+                            session:
+                                session
+
+                        })
+
+                }
+            );
 
 
         const result =
             await response.json();
 
 
-        if (!response.ok || result.success === false) {
+        if (
+            !response.ok ||
+            result.success === false
+        ) {
+
+            if (
+                result.error ===
+                "Nicht angemeldet."
+            ) {
+
+                logout();
+
+                return;
+
+            }
+
 
             throw new Error(
                 result.error ||
@@ -392,6 +792,7 @@ async function saveStatus() {
 
         console.error(error);
 
+
         showMessage(
 
             document.getElementById(
@@ -411,22 +812,26 @@ async function saveStatus() {
 
 
 document
-    .getElementById("save-status")
+    .getElementById(
+        "save-status"
+    )
     .addEventListener(
         "click",
         saveStatus
     );
 
 
-/* ================================
-   CHANGE LOG
-================================ */
+// ========================================
+// CHANGE LOG
+// ========================================
 
 async function addChangelog() {
 
     const text =
         document
-            .getElementById("changelog-text")
+            .getElementById(
+                "changelog-text"
+            )
             .value
             .trim();
 
@@ -453,32 +858,57 @@ async function addChangelog() {
     try {
 
         const response =
-            await fetch(API_URL, {
+            await fetch(
+                API_URL,
+                {
 
-                method: "POST",
+                    method: "POST",
 
-                headers: {
-                    "Content-Type":
-                        "application/x-www-form-urlencoded"
-                },
+                    headers: {
 
-                body: new URLSearchParams({
+                        "Content-Type":
+                            "application/x-www-form-urlencoded"
 
-                    action: "changelog",
+                    },
 
-                    text:
-                        text
+                    body:
+                        new URLSearchParams({
 
-                })
+                            action:
+                                "changelog",
 
-            });
+                            text:
+                                text,
+
+                            session:
+                                session
+
+                        })
+
+                }
+            );
 
 
         const result =
             await response.json();
 
 
-        if (!response.ok || result.success === false) {
+        if (
+            !response.ok ||
+            result.success === false
+        ) {
+
+            if (
+                result.error ===
+                "Nicht angemeldet."
+            ) {
+
+                logout();
+
+                return;
+
+            }
+
 
             throw new Error(
 
@@ -514,6 +944,7 @@ async function addChangelog() {
 
         console.error(error);
 
+
         showMessage(
 
             document.getElementById(
@@ -533,16 +964,18 @@ async function addChangelog() {
 
 
 document
-    .getElementById("add-changelog")
+    .getElementById(
+        "add-changelog"
+    )
     .addEventListener(
         "click",
         addChangelog
     );
 
 
-/* ================================
-   STATUS LADEN
-================================ */
+// ========================================
+// STATUS LADEN
+// ========================================
 
 async function loadStatus() {
 
@@ -569,20 +1002,22 @@ async function loadStatus() {
             "offline";
 
 
-        statusButtons.forEach(button => {
+        statusButtons.forEach(
+            button => {
 
-            if (
-                button.dataset.status ===
-                selectedStatus
-            ) {
+                if (
+                    button.dataset.status ===
+                    selectedStatus
+                ) {
 
-                button.classList.add(
-                    "selected"
-                );
+                    button.classList.add(
+                        "selected"
+                    );
+
+                }
 
             }
-
-        });
+        );
 
 
         document
@@ -606,9 +1041,74 @@ async function loadStatus() {
 }
 
 
-loadStatus();
+// ========================================
+// LOGIN BUTTON
+// ========================================
+
+document
+    .getElementById(
+        "login-button"
+    )
+    .addEventListener(
+        "click",
+        login
+    );
+
+
+// Enter-Taste beim Login
+document
+    .getElementById(
+        "password"
+    )
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                login();
+
+            }
+
+        }
+    );
+
+
+// Logout
+document
+    .getElementById(
+        "logout-button"
+    )
+    .addEventListener(
+        "click",
+        logout
+    );
+
+
+// ========================================
+// START
+// ========================================
+
+if (session) {
+
+    showAdminPanel();
+
+} else {
+
+    document
+        .getElementById(
+            "login-screen"
+        )
+        .style.display =
+        "block";
+
+}
 
 </script>
 
+
 </body>
+
 </html>
