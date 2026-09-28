@@ -117,6 +117,10 @@
             background: #8f2f2f;
         }
 
+        .badge.development {
+            background: #b8860b;
+        }
+
         footer {
             text-align: center;
             padding: 30px;
@@ -517,6 +521,22 @@ async function loadCommands() {
                 "active";
 
 
+            let statusText = "Aktiv";
+            let badgeClass = "";
+
+            if (status === "development" || status === "wartung") {
+
+                statusText = "Entwicklung";
+                badgeClass = "development";
+
+            } else if (status !== "active") {
+
+                statusText = "Inaktiv";
+                badgeClass = "inactive";
+
+            }
+
+
             card.innerHTML = `
 
                 <div class="command-name">
@@ -527,18 +547,8 @@ async function loadCommands() {
                     ${escapeHTML(description)}
                 </div>
 
-                <span class="badge ${
-                    status === "active"
-                        ? ""
-                        : "inactive"
-                }">
-
-                    ${
-                        status === "active"
-                            ? "Aktiv"
-                            : "Inaktiv"
-                    }
-
+                <span class="badge ${badgeClass}">
+                    ${statusText}
                 </span>
 
             `;
