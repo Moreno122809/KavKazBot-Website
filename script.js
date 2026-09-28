@@ -1,6 +1,10 @@
 const API_URL =
-    "https://script.google.com/macros/s/AKfycbxj4MyQARTi7sUlHtZHX8Wq6cIX19jJlh596LmJiCdBt49EYwhiG4UK1-bdIwR8ZI1s/exec";
+    "https://script.google.com/macros/s/AKfycbxj4MyQARTi7sUlHtZHX8Wq6cIX19jLlh596LmJiCdBt49EYwhiG4UK1-bdIwR8ZI1s/exec";
 
+
+// ========================================
+// STANDARD STATUS
+// ========================================
 
 const DEFAULT_STATUS = {
     status: "offline",
@@ -9,14 +13,9 @@ const DEFAULT_STATUS = {
 };
 
 
-const DEFAULT_CHANGELOG = [
-    {
-        title: "Website gestartet",
-        text: "Die neue KavKaz Bot Status-Website wurde eingerichtet.",
-        date: "28.09.2026"
-    }
-];
-
+// ========================================
+// BOT STATUS ANZEIGEN
+// ========================================
 
 function setStatus(statusData) {
 
@@ -81,6 +80,43 @@ function setStatus(statusData) {
 }
 
 
+// ========================================
+// CHANGE LOG BEREICH EIN-/AUSBLENDEN
+// ========================================
+
+function setChangelogVisibility(visible) {
+
+    const section =
+        document.getElementById("changelog");
+
+    const navLink =
+        document.querySelector(
+            'nav a[href="#changelog"]'
+        );
+
+
+    if (section) {
+
+        section.style.display =
+            visible ? "" : "none";
+
+    }
+
+
+    if (navLink) {
+
+        navLink.style.display =
+            visible ? "" : "none";
+
+    }
+
+}
+
+
+// ========================================
+// CHANGE LOG ANZEIGEN
+// ========================================
+
 function displayChangelog(entries) {
 
     const list =
@@ -92,44 +128,73 @@ function displayChangelog(entries) {
     }
 
 
-    list.innerHTML = "";
+    // ========================================
+    // KEIN CHANGE LOG
+    // ========================================
 
+    if (
+        !entries ||
+        !Array.isArray(entries) ||
+        entries.length === 0
+    ) {
 
-    if (!entries || entries.length === 0) {
-
-        list.innerHTML = `
-            <div class="loading">
-                Noch keine Change-Log-Einträge vorhanden.
-            </div>
-        `;
+        setChangelogVisibility(false);
 
         return;
+
     }
 
 
-    entries.forEach(entry => {
+    // ========================================
+    // NUR DEN NEUESTEN EINTRAG VERWENDEN
+    // ========================================
 
-        const item =
-            document.createElement("div");
-
-
-        item.className =
-            "changelog-entry";
+    const latestEntry =
+        entries[entries.length - 1];
 
 
-        item.innerHTML = `
-            <h3>${escapeHtml(entry.title)}</h3>
-            <div class="date">${escapeHtml(entry.date)}</div>
-            <p>${escapeHtml(entry.text)}</p>
-        `;
+    if (!latestEntry) {
+
+        setChangelogVisibility(false);
+
+        return;
+
+    }
 
 
-        list.appendChild(item);
+    // ========================================
+    // CHANGE LOG SICHTBAR MACHEN
+    // ========================================
 
-    });
+    setChangelogVisibility(true);
+
+
+    list.innerHTML = "";
+
+
+    const item =
+        document.createElement("div");
+
+
+    item.className =
+        "changelog-entry";
+
+
+    item.innerHTML = `
+        <h3>${escapeHtml(latestEntry.title)}</h3>
+        <div class="date">${escapeHtml(latestEntry.date)}</div>
+        <p>${escapeHtml(latestEntry.text)}</p>
+    `;
+
+
+    list.appendChild(item);
 
 }
 
+
+// ========================================
+// HTML SICHER MACHEN
+// ========================================
 
 function escapeHtml(text) {
 
@@ -145,6 +210,10 @@ function escapeHtml(text) {
 
 }
 
+
+// ========================================
+// STATUS LADEN
+// ========================================
 
 async function loadStatus() {
 
@@ -189,6 +258,10 @@ async function loadStatus() {
 }
 
 
+// ========================================
+// CHANGE LOG AUS LOCAL STORAGE LADEN
+// ========================================
+
 function loadLocalChangelog() {
 
     try {
@@ -199,19 +272,40 @@ function loadLocalChangelog() {
             );
 
 
-        if (savedChangelog) {
+        // ========================================
+        // KEIN CHANGE LOG GESPEICHERT
+        // ========================================
+
+        if (!savedChangelog) {
+
+            displayChangelog([]);
+
+            return;
+
+        }
+
+
+        const changelog =
+            JSON.parse(
+                savedChangelog
+            );
+
+
+        // ========================================
+        // CHANGE LOG ANZEIGEN
+        // ========================================
+
+        if (Array.isArray(changelog)) {
 
             displayChangelog(
-                JSON.parse(savedChangelog)
+                changelog
             );
 
         }
 
         else {
 
-            displayChangelog(
-                DEFAULT_CHANGELOG
-            );
+            displayChangelog([]);
 
         }
 
@@ -224,18 +318,26 @@ function loadLocalChangelog() {
         );
 
 
-        displayChangelog(
-            DEFAULT_CHANGELOG
-        );
+        displayChangelog([]);
 
     }
 
 }
 
 
+// ========================================
+// SEITE STARTEN
+// ========================================
+
 document.addEventListener(
     "DOMContentLoaded",
     () => {
+
+        // Change Log zunächst verstecken,
+        // damit kein leerer Bereich erscheint.
+
+        setChangelogVisibility(false);
+
 
         loadStatus();
 
