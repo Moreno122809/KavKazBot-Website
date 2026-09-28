@@ -12,221 +12,143 @@
 
     <title>KavKaz Bot – Admin</title>
 
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
     <style>
 
-        .login-container {
-            max-width: 450px;
-            margin: 100px auto;
-            padding: 0 25px;
+        * {
+            box-sizing: border-box;
         }
 
-        .login-card {
-            background: #11141b;
-            border: 1px solid #252a34;
-            border-radius: 16px;
-            padding: 30px;
-        }
-
-        .login-card h2 {
-            margin-bottom: 10px;
-        }
-
-        .login-card p {
-            color: #8d94a1;
-            line-height: 1.5;
-            margin-bottom: 25px;
-        }
-
-        .login-error {
-            margin-top: 15px;
-            padding: 12px;
-            border-radius: 8px;
-            background: rgba(239, 68, 68, 0.12);
-            color: #f87171;
-            display: none;
-        }
-
-        .logout-button {
-            margin-left: 10px;
-            background: #303641;
-        }
-
-        .logout-button:hover {
-            background: #3c4451;
-        }
-
-        .admin-container {
-            max-width: 900px;
-            margin: 60px auto;
-            padding: 0 25px;
-        }
-
-        .admin-card {
-            background: #11141b;
-            border: 1px solid #252a34;
-            border-radius: 16px;
-            padding: 30px;
-            margin-bottom: 25px;
-        }
-
-        .admin-card h2 {
-            margin-bottom: 25px;
-        }
-
-        .status-buttons {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-        }
-
-        .status-button {
-            border: 1px solid #303641;
-            background: #181c24;
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background:
+                radial-gradient(circle at top, #202020 0%, #0d0d0d 45%, #050505 100%);
             color: white;
-            padding: 15px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 15px;
         }
 
-        .status-button:hover {
-            background: #242a35;
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30px 20px 60px;
         }
 
-        .status-button.selected {
-            border-color: #7d8cff;
-            background: #202642;
+        .login-box,
+        .admin-box {
+            background: rgba(20, 20, 20, 0.95);
+            border: 1px solid #333;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 450px;
+            margin: 80px auto;
+            padding: 35px;
+        }
+
+        .admin-box {
+            padding: 25px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            margin-top: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            margin-bottom: 18px;
+        }
+
+        .section {
+            margin-bottom: 25px;
+            padding: 22px;
+            background: #111;
+            border: 1px solid #2c2c2c;
+            border-radius: 14px;
         }
 
         label {
             display: block;
-            color: #aeb4c0;
             margin-bottom: 8px;
-            font-size: 14px;
+            font-weight: bold;
         }
 
         input,
         textarea,
         select {
             width: 100%;
-            background: #090b10;
+            padding: 12px 14px;
+            margin-bottom: 15px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            background: #1b1b1b;
             color: white;
-            border: 1px solid #303641;
-            border-radius: 10px;
-            padding: 14px;
             font-size: 15px;
             outline: none;
-            margin-bottom: 18px;
-        }
-
-        select {
-            cursor: pointer;
-        }
-
-        textarea {
-            min-height: 250px;
-            resize: vertical;
         }
 
         input:focus,
         textarea:focus,
         select:focus {
-            border-color: #7d8cff;
+            border-color: #777;
         }
 
-        .admin-button {
-            border: 0;
-            background: #5865f2;
-            color: white;
-            padding: 14px 22px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: bold;
+        textarea {
+            min-height: 140px;
+            resize: vertical;
         }
 
-        .admin-button:hover {
-            background: #4752c4;
-        }
-
-        .message {
-            margin-top: 15px;
-            padding: 12px;
+        button {
+            border: none;
             border-radius: 8px;
-            display: none;
+            padding: 12px 18px;
+            background: #ffffff;
+            color: #000000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
         }
 
-        .message.success {
-            display: block;
-            background: rgba(34, 197, 94, 0.12);
-            color: #4ade80;
+        button:hover {
+            transform: translateY(-1px);
+            opacity: 0.9;
         }
 
-        .message.error {
-            display: block;
-            background: rgba(239, 68, 68, 0.12);
-            color: #f87171;
+        button.danger {
+            background: #d93030;
+            color: white;
         }
 
-        .back-link {
-            display: inline-block;
-            margin-top: 20px;
-            color: #8d96ff;
-            text-decoration: none;
+        button.secondary {
+            background: #333;
+            color: white;
         }
 
-        .hint {
-            color: #8d94a1;
-            font-size: 14px;
-            line-height: 1.5;
-            margin-bottom: 15px;
-        }
-
-        #admin-panel {
-            display: none;
-        }
-
-        /* ========================================
-           BEFEHLSVERWALTUNG
-        ======================================== */
-
-        .command-form {
-            border: 1px solid #252a34;
-            background: #0c0f15;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 25px;
-        }
-
-        .command-form h3 {
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
-
-        .command-buttons {
+        .topbar {
             display: flex;
-            gap: 10px;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
             flex-wrap: wrap;
         }
 
-        .secondary-button {
-            border: 1px solid #303641;
-            background: #181c24;
-            color: white;
-            padding: 14px 22px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: bold;
-        }
-
-        .secondary-button:hover {
-            background: #242a35;
+        .status-message {
+            margin-top: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background: #181818;
+            border: 1px solid #333;
+            min-height: 20px;
         }
 
         .command-list {
@@ -236,107 +158,80 @@
         }
 
         .command-item {
-            background: #0c0f15;
-            border: 1px solid #252a34;
-            border-radius: 12px;
-            padding: 18px;
+            background: #181818;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 15px;
         }
 
-        .command-top {
+        .command-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
             gap: 15px;
+            flex-wrap: wrap;
         }
 
         .command-name {
             font-size: 18px;
             font-weight: bold;
-            color: white;
-            margin-bottom: 7px;
         }
 
         .command-description {
-            color: #8d94a1;
-            line-height: 1.5;
-            margin-bottom: 12px;
+            color: #bbb;
+            margin-top: 7px;
+        }
+
+        .command-status {
+            margin-top: 10px;
+            font-size: 14px;
         }
 
         .command-actions {
             display: flex;
             gap: 8px;
+            margin-top: 12px;
             flex-wrap: wrap;
         }
 
-        .command-action {
-            border: 1px solid #303641;
-            background: #181c24;
-            color: white;
-            padding: 9px 13px;
-            border-radius: 8px;
-            cursor: pointer;
+        .hidden {
+            display: none !important;
         }
 
-        .command-action:hover {
-            background: #242a35;
+        .small {
+            color: #999;
+            font-size: 13px;
         }
 
-        .command-action.delete {
-            background: rgba(239, 68, 68, 0.10);
-            border-color: rgba(239, 68, 68, 0.30);
-            color: #f87171;
+        .success {
+            color: #63e66d;
         }
 
-        .command-status {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            white-space: nowrap;
+        .error {
+            color: #ff5c5c;
         }
 
-        .command-status.active {
-            background: rgba(34, 197, 94, 0.12);
-            color: #4ade80;
-        }
-
-        .command-status.development {
-            background: rgba(249, 115, 22, 0.12);
-            color: #fb923c;
-        }
-
-        .command-status.disabled {
-            background: rgba(239, 68, 68, 0.12);
-            color: #f87171;
-        }
-
-        .empty-commands {
-            color: #8d94a1;
-            text-align: center;
-            padding: 25px;
-            border: 1px dashed #303641;
-            border-radius: 10px;
-        }
-
-        .command-mode {
-            color: #8d94a1;
-            font-size: 14px;
-            margin-bottom: 18px;
+        .warning {
+            color: #ffb347;
         }
 
         @media (max-width: 700px) {
 
-            .status-buttons {
-                grid-template-columns: 1fr;
+            .container {
+                padding: 15px 10px 40px;
             }
 
-            .command-top {
-                flex-direction: column;
+            .admin-box {
+                padding: 15px;
             }
 
-            .command-actions {
-                width: 100%;
+            .section {
+                padding: 16px;
+            }
+
+            .login-box {
+                margin: 30px auto;
+                padding: 25px;
             }
 
         }
@@ -345,55 +240,20 @@
 
 </head>
 
-
 <body>
 
+<div class="container">
 
-<header>
+    <!-- LOGIN -->
 
-    <div class="logo">
-        KAVKAZ ADMIN
-    </div>
+    <div
+        id="loginBox"
+        class="login-box"
+    >
 
-    <nav>
+        <h1>KavKaz Bot</h1>
 
-        <a href="index.html">
-            Website
-        </a>
-
-    </nav>
-
-</header>
-
-
-<!-- ========================================
-     LOGIN
-======================================== -->
-
-<div
-    id="login-screen"
-    class="login-container"
->
-
-    <div class="login-card">
-
-        <div class="section-title">
-
-            <span>
-                ADMIN LOGIN
-            </span>
-
-            <h2>
-                KavKaz Bot Verwaltung
-            </h2>
-
-        </div>
-
-
-        <p>
-            Bitte melde dich an, um auf den Admin-Bereich zuzugreifen.
-        </p>
-
+        <h2>Admin Login</h2>
 
         <label for="username">
             Benutzername
@@ -406,7 +266,6 @@
             placeholder="Benutzername"
         >
 
-
         <label for="password">
             Passwort
         </label>
@@ -418,243 +277,151 @@
             placeholder="Passwort"
         >
 
-
         <button
-            id="login-button"
-            class="admin-button"
+            onclick="login()"
+            style="width:100%;"
         >
-            🔐 Einloggen
+            Einloggen
         </button>
 
-
         <div
-            id="login-error"
-            class="login-error"
+            id="loginMessage"
+            class="status-message"
         ></div>
 
     </div>
 
-</div>
 
+    <!-- ADMIN -->
 
-<!-- ========================================
-     ADMIN PANEL
-======================================== -->
+    <div
+        id="adminPanel"
+        class="admin-box hidden"
+    >
 
-<main
-    id="admin-panel"
->
+        <div class="topbar">
 
-    <div class="admin-container">
+            <div>
 
+                <h1 style="text-align:left; margin-bottom:5px;">
+                    KavKaz Bot – Admin
+                </h1>
 
-        <div class="section-title">
+                <div class="small">
+                    Admin-Bereich
+                </div>
 
-            <span>
-                ADMIN PANEL
-            </span>
+            </div>
 
-            <h2>
-                KavKaz Bot Verwaltung
-            </h2>
+            <button
+                class="secondary"
+                onclick="logout()"
+            >
+                Abmelden
+            </button>
 
         </div>
 
 
-        <!-- ========================================
-             BOT STATUS
-        ======================================== -->
+        <!-- BOT STATUS -->
 
-        <div class="admin-card">
+        <div class="section">
 
-            <h2>
-                Bot Status
-            </h2>
+            <h2>Bot Status</h2>
 
-
-            <div class="status-buttons">
-
-                <button
-                    class="status-button"
-                    data-status="online"
-                >
-                    🟢 Online
-                </button>
-
-
-                <button
-                    class="status-button"
-                    data-status="maintenance"
-                >
-                    🟠 Wartungsarbeiten
-                </button>
-
-
-                <button
-                    class="status-button"
-                    data-status="offline"
-                >
-                    🔴 Offline
-                </button>
-
-            </div>
-
-
-            <br>
-
-
-            <label for="status-message">
-                Status-Nachricht
+            <label for="botStatus">
+                Status
             </label>
 
+            <select id="botStatus">
+
+                <option value="active">
+                    🟢 Bot Online
+                </option>
+
+                <option value="maintenance">
+                    🟠 Wartungsarbeiten
+                </option>
+
+                <option value="offline">
+                    🔴 Bot Offline
+                </option>
+
+            </select>
+
+
+            <label for="botTitle">
+                Titel
+            </label>
 
             <input
-                id="status-message"
+                id="botTitle"
                 type="text"
-                placeholder="z.B. Der Bot läuft problemlos."
+                placeholder="Bot Online"
             >
 
 
-            <button
-                id="save-status"
-                class="admin-button"
-            >
+            <label for="botText">
+                Beschreibung
+            </label>
+
+            <textarea
+                id="botText"
+                placeholder="Der Bot ist derzeit online."
+            ></textarea>
+
+
+            <button onclick="saveStatus()">
                 Status speichern
             </button>
 
-
             <div
-                id="status-result"
-                class="message"
+                id="statusMessage"
+                class="status-message"
             ></div>
 
         </div>
 
 
-        <!-- ========================================
-             BEFEHLE
-        ======================================== -->
+        <!-- CHANGELOG -->
 
-        <div class="admin-card">
+        <div class="section">
 
-            <h2>
-                Bot-Befehle verwalten
-            </h2>
+            <h2>Change Log</h2>
 
+            <label for="changelogText">
+                Neuer Change Log
+            </label>
 
-            <p class="hint">
+            <textarea
+                id="changelogText"
+                placeholder="Beschreibe hier die Änderungen..."
+            ></textarea>
 
-                Hier kannst du die Befehle verwalten, die auf
-                der öffentlichen KavKaz-Website angezeigt werden.
-                Diese Verwaltung ändert nicht automatisch die
-                Discord-Befehle des Bots.
-
-            </p>
-
-
-            <div class="command-form">
-
-                <h3 id="command-form-title">
-                    ➕ Neuen Befehl hinzufügen
-                </h3>
-
-
-                <div
-                    id="command-mode"
-                    class="command-mode"
-                >
-                    Erstelle einen neuen Eintrag für die Website.
-                </div>
-
-
-                <label for="command-name">
-                    Befehl
-                </label>
-
-
-                <input
-                    id="command-name"
-                    type="text"
-                    placeholder="z.B. /kick"
-                    maxlength="50"
-                >
-
-
-                <label for="command-description">
-                    Beschreibung
-                </label>
-
-
-                <input
-                    id="command-description"
-                    type="text"
-                    placeholder="z.B. Entfernt einen Benutzer vom Server."
-                    maxlength="200"
-                >
-
-
-                <label for="command-status">
-                    Status
-                </label>
-
-
-                <select id="command-status">
-
-                    <option value="active">
-                        🟢 Aktiv
-                    </option>
-
-                    <option value="development">
-                        🟠 Entwicklung
-                    </option>
-
-                    <option value="disabled">
-                        🔴 Deaktiviert
-                    </option>
-
-                </select>
-
-
-                <div class="command-buttons">
-
-                    <button
-                        id="save-command"
-                        class="admin-button"
-                    >
-                        💾 Befehl speichern
-                    </button>
-
-
-                    <button
-                        id="cancel-command-edit"
-                        class="secondary-button"
-                        style="display:none;"
-                    >
-                        Abbrechen
-                    </button>
-
-                </div>
-
-
-                <div
-                    id="command-result"
-                    class="message"
-                ></div>
-
-            </div>
-
-
-            <h3>
-                Vorhandene Befehle
-            </h3>
-
+            <button onclick="addChangelog()">
+                Change Log veröffentlichen
+            </button>
 
             <div
-                id="command-list"
+                id="changelogMessage"
+                class="status-message"
+            ></div>
+
+        </div>
+
+
+        <!-- COMMANDS -->
+
+        <div class="section">
+
+            <h2>Befehle</h2>
+
+            <div
+                id="commandsList"
                 class="command-list"
             >
 
-                <div class="empty-commands">
+                <div class="small">
                     Befehle werden geladen...
                 </div>
 
@@ -663,752 +430,441 @@
         </div>
 
 
-        <!-- ========================================
-             CHANGE LOG
-        ======================================== -->
+        <!-- ADD COMMAND -->
 
-        <div class="admin-card">
+        <div class="section">
 
-            <h2>
-                Discord Change Log
-            </h2>
+            <h2>Befehl hinzufügen</h2>
 
-
-            <p class="hint">
-
-                Schreibe hier den kompletten Change Log hinein.
-                Der Text wird direkt als normale Discord-Nachricht
-                in den Change-Log-Kanal gesendet.
-
-            </p>
-
-
-            <label for="changelog-text">
-                Change Log
+            <label for="commandName">
+                Befehl
             </label>
 
-
-            <textarea
-                id="changelog-text"
-                placeholder="**Changes:**
-
-- Neuer Punkt
-
-**Fixes:**
-
-- Fehler behoben."
-            ></textarea>
-
-
-            <button
-                id="add-changelog"
-                class="admin-button"
+            <input
+                id="commandName"
+                type="text"
+                placeholder="/beispiel"
             >
-                📢 Change Log veröffentlichen
+
+            <label for="commandDescription">
+                Beschreibung
+            </label>
+
+            <input
+                id="commandDescription"
+                type="text"
+                placeholder="Beschreibung des Befehls"
+            >
+
+            <label for="commandStatus">
+                Status
+            </label>
+
+            <select id="commandStatus">
+
+                <option value="active">
+                    🟢 Aktiv
+                </option>
+
+                <option value="development">
+                    🟠 Entwicklung
+                </option>
+
+                <option value="disabled">
+                    🔴 Deaktiviert
+                </option>
+
+            </select>
+
+            <button onclick="saveCommand()">
+                Befehl speichern
             </button>
 
-
             <div
-                id="changelog-result"
-                class="message"
+                id="commandMessage"
+                class="status-message"
             ></div>
 
         </div>
 
-
-        <button
-            id="logout-button"
-            class="admin-button logout-button"
-        >
-            🚪 Ausloggen
-        </button>
-
-
-        <br>
-
-
-        <a
-            class="back-link"
-            href="index.html"
-        >
-            ← Zur öffentlichen Website
-        </a>
-
-
     </div>
 
-</main>
+</div>
 
 
 <script>
 
-
-// ========================================
-// API
-// ========================================
-
 const API_URL =
-    "https://script.google.com/macros/s/AKfycbxj4MyQARTi7sUlHtZHX8Wq6cIX19jLlh596LmJiCdBt49EYwhiG4UK1-bdIwR8ZI1s/exec";
+    "https://script.google.com/macros/s/AKfycbxj4MyQARTi7sUlHtZHX8Wq6cIX19jJlh596LmJiCdBt49EYwhiG4UK1-bdIwR8ZI1s/exec";
 
 
-let selectedStatus = "offline";
+let SESSION = localStorage.getItem("kavkaz_admin_session") || "";
 
 
-let session =
-    sessionStorage.getItem(
-        "kavkaz_admin_session"
-    );
+
+/* =========================================================
+   JSONP API
+   ========================================================= */
+
+function apiGet(params) {
+
+    return new Promise((resolve, reject) => {
+
+        const callbackName =
+            "kavkazApi_" +
+            Date.now() +
+            "_" +
+            Math.floor(Math.random() * 100000);
 
 
-let commands = [];
-
-let editingCommandId = null;
-
-
-// ========================================
-// LOGIN
-// ========================================
-
-function login() {
-
-    const username =
-        document
-            .getElementById(
-                "username"
-            )
-            .value
-            .trim();
+        const script =
+            document.createElement("script");
 
 
-    const password =
-        document
-            .getElementById(
-                "password"
-            )
-            .value;
+        let finished = false;
 
 
-    const errorBox =
-        document.getElementById(
-            "login-error"
+        function cleanup() {
+
+            if (script.parentNode) {
+                script.parentNode.removeChild(script);
+            }
+
+            try {
+                delete window[callbackName];
+            } catch (e) {
+                window[callbackName] = undefined;
+            }
+
+        }
+
+
+        window[callbackName] = function(result) {
+
+            if (finished) {
+                return;
+            }
+
+            finished = true;
+
+            cleanup();
+
+            resolve(result);
+
+        };
+
+
+        script.onerror = function() {
+
+            if (finished) {
+                return;
+            }
+
+            finished = true;
+
+            cleanup();
+
+            reject(
+                new Error(
+                    "Verbindung zum Server fehlgeschlagen."
+                )
+            );
+
+        };
+
+
+        const query =
+            new URLSearchParams();
+
+
+        Object.keys(params).forEach(function(key) {
+
+            const value = params[key];
+
+            if (
+                value !== undefined &&
+                value !== null
+            ) {
+
+                query.append(
+                    key,
+                    value
+                );
+
+            }
+
+        });
+
+
+        query.append(
+            "callback",
+            callbackName
         );
 
 
-    errorBox.style.display =
-        "none";
+        script.src =
+            API_URL +
+            "?" +
+            query.toString();
+
+
+        document.body.appendChild(script);
+
+
+        setTimeout(function() {
+
+            if (finished) {
+                return;
+            }
+
+            finished = true;
+
+            cleanup();
+
+            reject(
+                new Error(
+                    "Zeitüberschreitung beim Server."
+                )
+            );
+
+        }, 20000);
+
+    });
+
+}
+
+
+
+/* =========================================================
+   LOGIN
+   ========================================================= */
+
+async function login() {
+
+    const username =
+        document.getElementById("username").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+
+    const message =
+        document.getElementById("loginMessage");
 
 
     if (!username || !password) {
 
-        errorBox.textContent =
-            "❌ Bitte Benutzername und Passwort eingeben.";
-
-        errorBox.style.display =
-            "block";
+        message.innerHTML =
+            '<span class="error">Bitte Benutzername und Passwort eingeben.</span>';
 
         return;
 
     }
 
 
-    const callbackName =
-        "kavkazLogin_" +
-        Date.now();
+    message.innerHTML =
+        "Login wird geprüft...";
 
 
-    window[callbackName] =
-        function(result) {
+    try {
 
-            try {
+        const data =
+            await apiGet({
 
-                if (
-                    !result ||
-                    result.success === false
-                ) {
+                action: "login",
 
-                    throw new Error(
+                username: username,
 
-                        result &&
-                        result.error
+                password: password
 
-                            ? result.error
-
-                            : "Login fehlgeschlagen."
-
-                    );
-
-                }
+            });
 
 
-                session =
-                    result.session;
+        if (
+            data &&
+            data.success
+        ) {
+
+            SESSION =
+                data.session;
 
 
-                sessionStorage.setItem(
-
-                    "kavkaz_admin_session",
-
-                    session
-
-                );
+            localStorage.setItem(
+                "kavkaz_admin_session",
+                SESSION
+            );
 
 
-                showAdminPanel();
+            message.innerHTML =
+                '<span class="success">Login erfolgreich.</span>';
 
 
-            } catch (error) {
-
-                errorBox.textContent =
-                    "❌ " +
-                    error.message;
-
-                errorBox.style.display =
-                    "block";
-
-            }
+            document.getElementById(
+                "loginBox"
+            ).classList.add("hidden");
 
 
-            delete window[callbackName];
+            document.getElementById(
+                "adminPanel"
+            ).classList.remove("hidden");
 
 
-            const oldScript =
-                document.getElementById(
-                    "kavkaz-login-script"
-                );
+            document.getElementById(
+                "password"
+            ).value = "";
 
 
-            if (oldScript) {
+            await loadStatus();
 
-                oldScript.remove();
+            await loadCommands();
 
-            }
+        } else {
 
-        };
+            message.innerHTML =
+                '<span class="error">' +
+                (
+                    data &&
+                    data.message
+                        ? data.message
+                        : "Login fehlgeschlagen."
+                ) +
+                '</span>';
 
+        }
 
-    const script =
-        document.createElement(
-            "script"
-        );
+    } catch (error) {
 
+        console.error(error);
 
-    script.id =
-        "kavkaz-login-script";
+        message.innerHTML =
+            '<span class="error">' +
+            error.message +
+            '</span>';
 
-
-    script.src =
-        API_URL +
-        "?action=login" +
-        "&username=" +
-        encodeURIComponent(username) +
-        "&password=" +
-        encodeURIComponent(password) +
-        "&callback=" +
-        encodeURIComponent(callbackName);
-
-
-    script.onerror =
-        function() {
-
-            errorBox.textContent =
-                "❌ Verbindung zum Login-Server fehlgeschlagen.";
-
-            errorBox.style.display =
-                "block";
-
-
-            delete window[callbackName];
-
-
-            script.remove();
-
-        };
-
-
-    document
-        .body
-        .appendChild(script);
+    }
 
 }
 
 
-// ========================================
-// ADMIN PANEL ANZEIGEN
-// ========================================
 
-function showAdminPanel() {
-
-    document
-        .getElementById(
-            "login-screen"
-        )
-        .style.display =
-        "none";
-
-
-    document
-        .getElementById(
-            "admin-panel"
-        )
-        .style.display =
-        "block";
-
-
-    loadStatus();
-
-    loadCommands();
-
-}
-
-
-// ========================================
-// AUSLOGGEN
-// ========================================
+/* =========================================================
+   LOGOUT
+   ========================================================= */
 
 function logout() {
 
-    session =
-        null;
+    SESSION = "";
 
-
-    sessionStorage.removeItem(
+    localStorage.removeItem(
         "kavkaz_admin_session"
     );
 
 
-    location.reload();
+    document.getElementById(
+        "adminPanel"
+    ).classList.add("hidden");
+
+
+    document.getElementById(
+        "loginBox"
+    ).classList.remove("hidden");
+
+
+    document.getElementById(
+        "username"
+    ).value = "";
+
+
+    document.getElementById(
+        "password"
+    ).value = "";
 
 }
 
 
-// ========================================
-// STATUS BUTTONS
-// ========================================
 
-const statusButtons =
-    document.querySelectorAll(
-        ".status-button"
-    );
+/* =========================================================
+   SESSION PRÜFEN
+   ========================================================= */
 
+function checkSession() {
 
-statusButtons.forEach(
-    button => {
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                statusButtons.forEach(
-                    btn => {
-
-                        btn.classList.remove(
-                            "selected"
-                        );
-
-                    }
-                );
-
-
-                button.classList.add(
-                    "selected"
-                );
-
-
-                selectedStatus =
-                    button.dataset.status;
-
-            }
-        );
-
+    if (!SESSION) {
+        return false;
     }
-);
+
+    document.getElementById(
+        "loginBox"
+    ).classList.add("hidden");
 
 
-// ========================================
-// NACHRICHTEN
-// ========================================
-
-function showMessage(
-    element,
-    text,
-    type
-) {
-
-    element.textContent =
-        text;
+    document.getElementById(
+        "adminPanel"
+    ).classList.remove("hidden");
 
 
-    element.className =
-        "message " +
-        type;
+    return true;
 
 }
 
 
-// ========================================
-// STATUS SPEICHERN
-// ========================================
 
-async function saveStatus() {
-
-    const message =
-        document
-            .getElementById(
-                "status-message"
-            )
-            .value
-            .trim();
-
-
-    try {
-
-        const response =
-            await fetch(
-
-                API_URL,
-
-                {
-
-                    method:
-                        "POST",
-
-                    headers: {
-
-                        "Content-Type":
-                            "application/x-www-form-urlencoded"
-
-                    },
-
-                    body:
-                        new URLSearchParams({
-
-                            action:
-                                "status",
-
-                            status:
-                                selectedStatus,
-
-                            text:
-                                message,
-
-                            session:
-                                session
-
-                        })
-
-                }
-
-            );
-
-
-        const result =
-            await response.json();
-
-
-        if (
-            !response.ok ||
-            result.success === false
-        ) {
-
-            if (
-                result.error ===
-                "Nicht angemeldet."
-            ) {
-
-                logout();
-
-                return;
-
-            }
-
-
-            throw new Error(
-
-                result.error ||
-
-                "Status konnte nicht gespeichert werden."
-
-            );
-
-        }
-
-
-        showMessage(
-
-            document.getElementById(
-                "status-result"
-            ),
-
-            "✅ Status wurde erfolgreich gespeichert.",
-
-            "success"
-
-        );
-
-
-    } catch (error) {
-
-        console.error(error);
-
-
-        showMessage(
-
-            document.getElementById(
-                "status-result"
-            ),
-
-            "❌ Fehler: " +
-                error.message,
-
-            "error"
-
-        );
-
-    }
-
-}
-
-
-document
-    .getElementById(
-        "save-status"
-    )
-    .addEventListener(
-        "click",
-        saveStatus
-    );
-
-
-// ========================================
-// CHANGE LOG
-// ========================================
-
-async function addChangelog() {
-
-    const text =
-        document
-            .getElementById(
-                "changelog-text"
-            )
-            .value
-            .trim();
-
-
-    if (!text) {
-
-        showMessage(
-
-            document.getElementById(
-                "changelog-result"
-            ),
-
-            "❌ Bitte zuerst einen Change Log eingeben.",
-
-            "error"
-
-        );
-
-        return;
-
-    }
-
-
-    try {
-
-        const response =
-            await fetch(
-
-                API_URL,
-
-                {
-
-                    method:
-                        "POST",
-
-                    headers: {
-
-                        "Content-Type":
-                            "application/x-www-form-urlencoded"
-
-                    },
-
-                    body:
-                        new URLSearchParams({
-
-                            action:
-                                "changelog",
-
-                            text:
-                                text,
-
-                            session:
-                                session
-
-                        })
-
-                }
-
-            );
-
-
-        const result =
-            await response.json();
-
-
-        if (
-            !response.ok ||
-            result.success === false
-        ) {
-
-            if (
-                result.error ===
-                "Nicht angemeldet."
-            ) {
-
-                logout();
-
-                return;
-
-            }
-
-
-            throw new Error(
-
-                result.error ||
-
-                "Change Log konnte nicht gesendet werden."
-
-            );
-
-        }
-
-
-        showMessage(
-
-            document.getElementById(
-                "changelog-result"
-            ),
-
-            "✅ Change Log wurde erfolgreich an Discord gesendet.",
-
-            "success"
-
-        );
-
-
-        document
-            .getElementById(
-                "changelog-text"
-            )
-            .value = "";
-
-
-    } catch (error) {
-
-        console.error(error);
-
-
-        showMessage(
-
-            document.getElementById(
-                "changelog-result"
-            ),
-
-            "❌ Fehler: " +
-                error.message,
-
-            "error"
-
-        );
-
-    }
-
-}
-
-
-document
-    .getElementById(
-        "add-changelog"
-    )
-    .addEventListener(
-        "click",
-        addChangelog
-    );
-
-
-// ========================================
-// STATUS LADEN
-// ========================================
+/* =========================================================
+   STATUS LADEN
+   ========================================================= */
 
 async function loadStatus() {
 
+    if (!SESSION) {
+        return;
+    }
+
+
     try {
 
-        const response =
-            await fetch(
+        const data =
+            await apiGet({
 
-                API_URL +
-                "?action=status"
+                action: "status"
 
-            );
+            });
 
 
-        if (!response.ok) {
+        if (
+            !data ||
+            !data.success
+        ) {
 
             return;
 
         }
 
 
-        const data =
-            await response.json();
+        const status =
+            data.status || "offline";
 
 
-        selectedStatus =
-            data.status ||
-            "offline";
+        document.getElementById(
+            "botStatus"
+        ).value = status;
 
 
-        statusButtons.forEach(
-            button => {
-
-                button.classList.remove(
-                    "selected"
-                );
+        document.getElementById(
+            "botTitle"
+        ).value =
+            data.title || "";
 
 
-                if (
-                    button.dataset.status ===
-                    selectedStatus
-                ) {
-
-                    button.classList.add(
-                        "selected"
-                    );
-
-                }
-
-            }
-        );
-
-
-        document
-            .getElementById(
-                "status-message"
-            )
-            .value =
-                data.text ||
-                "";
-
+        document.getElementById(
+            "botText"
+        ).value =
+            data.text || "";
 
     } catch (error) {
 
         console.error(
-
             "Status konnte nicht geladen werden:",
-
             error
-
         );
 
     }
@@ -1416,106 +872,175 @@ async function loadStatus() {
 }
 
 
-// ========================================
-// BEFEHLE LADEN
-// ========================================
 
-async function loadCommands() {
+/* =========================================================
+   STATUS SPEICHERN
+   ========================================================= */
 
-    const list =
+async function saveStatus() {
+
+    const message =
         document.getElementById(
-            "command-list"
+            "statusMessage"
         );
 
 
-    list.innerHTML =
-        '<div class="empty-commands">Befehle werden geladen...</div>';
+    if (!SESSION) {
 
-
-    try {
-
-        const response =
-            await fetch(
-
-                API_URL +
-                "?action=commands"
-
-            );
-
-
-        const result =
-            await response.json();
-
-
-        if (
-            !response.ok ||
-            result.success === false
-        ) {
-
-            throw new Error(
-
-                result.error ||
-                "Befehle konnten nicht geladen werden."
-
-            );
-
-        }
-
-
-        commands =
-            Array.isArray(result.commands)
-                ? result.commands
-                : [];
-
-
-        renderCommands();
-
-
-    } catch (error) {
-
-        console.error(error);
-
-
-        list.innerHTML =
-            '<div class="empty-commands">❌ Befehle konnten nicht geladen werden.</div>';
-
-    }
-
-}
-
-
-// ========================================
-// BEFEHLE ANZEIGEN
-// ========================================
-
-function renderCommands() {
-
-    const list =
-        document.getElementById(
-            "command-list"
-        );
-
-
-    if (!commands.length) {
-
-        list.innerHTML =
-            '<div class="empty-commands">Noch keine Befehle vorhanden.</div>';
+        message.innerHTML =
+            '<span class="error">Keine gültige Sitzung.</span>';
 
         return;
 
     }
 
 
-    list.innerHTML = "";
+    const status =
+        document.getElementById(
+            "botStatus"
+        ).value;
 
 
-    commands.forEach(
-        command => {
+    const title =
+        document.getElementById(
+            "botTitle"
+        ).value;
+
+
+    const botText =
+        document.getElementById(
+            "botText"
+        ).value;
+
+
+    message.innerHTML =
+        "Status wird gespeichert...";
+
+
+    try {
+
+        const data =
+            await apiGet({
+
+                action: "saveStatus",
+
+                session: SESSION,
+
+                status: status,
+
+                title: title,
+
+                text: botText
+
+            });
+
+
+        if (
+            data &&
+            data.success
+        ) {
+
+            message.innerHTML =
+                '<span class="success">✅ Status erfolgreich gespeichert.</span>';
+
+        } else {
+
+            message.innerHTML =
+                '<span class="error">❌ ' +
+                (
+                    data &&
+                    data.message
+                        ? data.message
+                        : "Status konnte nicht gespeichert werden."
+                ) +
+                '</span>';
+
+            if (
+                data &&
+                data.message === "Nicht autorisiert"
+            ) {
+                logout();
+            }
+
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        message.innerHTML =
+            '<span class="error">❌ Fehler: ' +
+            error.message +
+            '</span>';
+
+    }
+
+}
+
+
+
+/* =========================================================
+   COMMANDS LADEN
+   ========================================================= */
+
+async function loadCommands() {
+
+    const list =
+        document.getElementById(
+            "commandsList"
+        );
+
+
+    list.innerHTML =
+        '<div class="small">Befehle werden geladen...</div>';
+
+
+    try {
+
+        const data =
+            await apiGet({
+
+                action: "commands"
+
+            });
+
+
+        if (
+            !data ||
+            !data.success
+        ) {
+
+            list.innerHTML =
+                '<div class="error">❌ Befehle konnten nicht geladen werden.</div>';
+
+            return;
+
+        }
+
+
+        const commands =
+            Array.isArray(data.commands)
+                ? data.commands
+                : [];
+
+
+        if (commands.length === 0) {
+
+            list.innerHTML =
+                '<div class="small">Noch keine Befehle vorhanden.</div>';
+
+            return;
+
+        }
+
+
+        list.innerHTML = "";
+
+
+        commands.forEach(function(command) {
 
             const item =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
 
             item.className =
@@ -1523,97 +1048,64 @@ function renderCommands() {
 
 
             let statusText =
-                "🟢 Aktiv";
-
-            let statusClass =
-                "active";
+                "🔴 Deaktiviert";
 
 
             if (
-                command.status ===
-                "development"
+                command.status === "active"
+            ) {
+
+                statusText =
+                    "🟢 Aktiv";
+
+            } else if (
+                command.status === "development" ||
+                command.status === "maintenance"
             ) {
 
                 statusText =
                     "🟠 Entwicklung";
-
-                statusClass =
-                    "development";
-
-            }
-
-
-            /*
-             * Alte gespeicherte Befehle mit
-             * "maintenance" werden ebenfalls
-             * als Entwicklung angezeigt.
-             */
-            if (
-                command.status ===
-                "maintenance"
-            ) {
-
-                statusText =
-                    "🟠 Entwicklung";
-
-                statusClass =
-                    "development";
-
-            }
-
-
-            if (
-                command.status ===
-                "disabled"
-            ) {
-
-                statusText =
-                    "🔴 Deaktiviert";
-
-                statusClass =
-                    "disabled";
 
             }
 
 
             item.innerHTML = `
 
-                <div class="command-top">
+                <div class="command-header">
 
                     <div>
 
                         <div class="command-name">
-                            ${escapeHtml(command.name || "")}
+                            ${escapeHtml(command.name || command.command || "")}
                         </div>
 
                         <div class="command-description">
                             ${escapeHtml(command.description || "")}
                         </div>
 
-                        <span class="command-status ${statusClass}">
-                            ${statusText}
-                        </span>
-
                     </div>
 
+                </div>
 
-                    <div class="command-actions">
+                <div class="command-status">
+                    Status: ${statusText}
+                </div>
 
-                        <button
-                            class="command-action"
-                            onclick="editCommand('${escapeJs(command.id)}')"
-                        >
-                            ✏️ Bearbeiten
-                        </button>
+                <div class="command-actions">
 
-                        <button
-                            class="command-action delete"
-                            onclick="deleteCommand('${escapeJs(command.id)}')"
-                        >
-                            🗑️ Löschen
-                        </button>
+                    <button
+                        class="secondary"
+                        onclick="editCommand('${escapeJs(command.id)}')"
+                    >
+                        Bearbeiten
+                    </button>
 
-                    </div>
+                    <button
+                        class="danger"
+                        onclick="deleteCommand('${escapeJs(command.id)}')"
+                    >
+                        Löschen
+                    </button>
 
                 </div>
 
@@ -1622,19 +1114,436 @@ function renderCommands() {
 
             list.appendChild(item);
 
-        }
-    );
+        });
+
+
+        window.kavkazCommands =
+            commands;
+
+    } catch (error) {
+
+        console.error(error);
+
+        list.innerHTML =
+            '<div class="error">❌ Befehle konnten nicht geladen werden.</div>';
+
+    }
 
 }
 
 
-// ========================================
-// HTML SICHER MACHEN
-// ========================================
 
-function escapeHtml(text) {
+/* =========================================================
+   BEFEHL SPEICHERN
+   ========================================================= */
 
-    return String(text)
+async function saveCommand() {
+
+    const message =
+        document.getElementById(
+            "commandMessage"
+        );
+
+
+    if (!SESSION) {
+
+        message.innerHTML =
+            '<span class="error">Keine gültige Sitzung.</span>';
+
+        return;
+
+    }
+
+
+    const name =
+        document.getElementById(
+            "commandName"
+        ).value.trim();
+
+
+    const description =
+        document.getElementById(
+            "commandDescription"
+        ).value.trim();
+
+
+    let status =
+        document.getElementById(
+            "commandStatus"
+        ).value;
+
+
+    if (!name) {
+
+        message.innerHTML =
+            '<span class="error">Bitte einen Befehl eingeben.</span>';
+
+        return;
+
+    }
+
+
+    if (!description) {
+
+        message.innerHTML =
+            '<span class="error">Bitte eine Beschreibung eingeben.</span>';
+
+        return;
+
+    }
+
+
+    if (status === "maintenance") {
+        status = "development";
+    }
+
+
+    message.innerHTML =
+        "Befehl wird gespeichert...";
+
+
+    try {
+
+        const data =
+            await apiGet({
+
+                action: "saveCommand",
+
+                session: SESSION,
+
+                name: name,
+
+                description: description,
+
+                status: status
+
+            });
+
+
+        if (
+            data &&
+            data.success
+        ) {
+
+            message.innerHTML =
+                '<span class="success">✅ Befehl erfolgreich gespeichert.</span>';
+
+
+            document.getElementById(
+                "commandName"
+            ).value = "";
+
+
+            document.getElementById(
+                "commandDescription"
+            ).value = "";
+
+
+            document.getElementById(
+                "commandStatus"
+            ).value = "active";
+
+
+            await loadCommands();
+
+        } else {
+
+            message.innerHTML =
+                '<span class="error">❌ ' +
+                (
+                    data &&
+                    data.message
+                        ? data.message
+                        : "Befehl konnte nicht gespeichert werden."
+                ) +
+                '</span>';
+
+
+            if (
+                data &&
+                data.message === "Nicht autorisiert"
+            ) {
+
+                logout();
+
+            }
+
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        message.innerHTML =
+            '<span class="error">❌ Fehler: ' +
+            error.message +
+            '</span>';
+
+    }
+
+}
+
+
+
+/* =========================================================
+   BEFEHL BEARBEITEN
+   ========================================================= */
+
+function editCommand(id) {
+
+    const commands =
+        window.kavkazCommands || [];
+
+
+    const command =
+        commands.find(function(item) {
+
+            return String(item.id) === String(id);
+
+        });
+
+
+    if (!command) {
+
+        alert(
+            "Befehl konnte nicht gefunden werden."
+        );
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "commandName"
+    ).value =
+        command.name ||
+        command.command ||
+        "";
+
+
+    document.getElementById(
+        "commandDescription"
+    ).value =
+        command.description ||
+        "";
+
+
+    let status =
+        command.status || "active";
+
+
+    if (status === "maintenance") {
+        status = "development";
+    }
+
+
+    document.getElementById(
+        "commandStatus"
+    ).value =
+        status;
+
+
+    window.editingCommandId =
+        command.id;
+
+
+    const button =
+        document.querySelector(
+            'button[onclick="saveCommand()"]'
+        );
+
+
+    if (button) {
+
+        button.textContent =
+            "Befehl aktualisieren";
+
+    }
+
+}
+
+
+
+/* =========================================================
+   BEFEHL LÖSCHEN
+   ========================================================= */
+
+async function deleteCommand(id) {
+
+    if (
+        !confirm(
+            "Möchtest du diesen Befehl wirklich löschen?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const data =
+            await apiGet({
+
+                action: "deleteCommand",
+
+                session: SESSION,
+
+                id: id
+
+            });
+
+
+        if (
+            data &&
+            data.success
+        ) {
+
+            await loadCommands();
+
+        } else {
+
+            alert(
+                data &&
+                data.message
+                    ? data.message
+                    : "Befehl konnte nicht gelöscht werden."
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Fehler: " +
+            error.message
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   CHANGELOG
+   ========================================================= */
+
+async function addChangelog() {
+
+    const message =
+        document.getElementById(
+            "changelogMessage"
+        );
+
+
+    if (!SESSION) {
+
+        message.innerHTML =
+            '<span class="error">Keine gültige Sitzung.</span>';
+
+        return;
+
+    }
+
+
+    const text =
+        document.getElementById(
+            "changelogText"
+        ).value.trim();
+
+
+    if (!text) {
+
+        message.innerHTML =
+            '<span class="error">Bitte einen Change Log eingeben.</span>';
+
+        return;
+
+    }
+
+
+    message.innerHTML =
+        "Change Log wird veröffentlicht...";
+
+
+    try {
+
+        const data =
+            await apiGet({
+
+                action: "saveChangelog",
+
+                session: SESSION,
+
+                text: text
+
+            });
+
+
+        if (
+            data &&
+            data.success
+        ) {
+
+            message.innerHTML =
+                '<span class="success">✅ Change Log erfolgreich veröffentlicht.</span>';
+
+
+            document.getElementById(
+                "changelogText"
+            ).value = "";
+
+        } else {
+
+            message.innerHTML =
+                '<span class="error">❌ ' +
+                (
+                    data &&
+                    data.message
+                        ? data.message
+                        : "Change Log konnte nicht gespeichert werden."
+                ) +
+                '</span>';
+
+
+            if (
+                data &&
+                data.message === "Nicht autorisiert"
+            ) {
+
+                logout();
+
+            }
+
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        message.innerHTML =
+            '<span class="error">❌ Fehler: ' +
+            error.message +
+            '</span>';
+
+    }
+
+}
+
+
+
+/* =========================================================
+   HTML SICHER AUSGEBEN
+   ========================================================= */
+
+function escapeHtml(value) {
+
+    return String(value)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
@@ -1644,624 +1553,55 @@ function escapeHtml(text) {
 }
 
 
-function escapeJs(text) {
+function escapeJs(value) {
 
-    return String(text)
+    return String(value)
         .replace(/\\/g, "\\\\")
         .replace(/'/g, "\\'");
 
 }
 
 
-// ========================================
-// BEFEHL SPEICHERN
-// ========================================
 
-async function saveCommand() {
+/* =========================================================
+   ENTER = LOGIN
+   ========================================================= */
 
-    const name =
-        document
-            .getElementById(
-                "command-name"
-            )
-            .value
-            .trim();
-
-
-    const description =
-        document
-            .getElementById(
-                "command-description"
-            )
-            .value
-            .trim();
-
-
-    const status =
-        document
-            .getElementById(
-                "command-status"
-            )
-            .value;
-
-
-    if (!name) {
-
-        showMessage(
-
-            document.getElementById(
-                "command-result"
-            ),
-
-            "❌ Bitte einen Befehlsnamen eingeben.",
-
-            "error"
-
-        );
-
-        return;
-
-    }
-
-
-    if (!description) {
-
-        showMessage(
-
-            document.getElementById(
-                "command-result"
-            ),
-
-            "❌ Bitte eine Beschreibung eingeben.",
-
-            "error"
-
-        );
-
-        return;
-
-    }
-
-
-    try {
-
-        const response =
-            await fetch(
-
-                API_URL,
-
-                {
-
-                    method:
-                        "POST",
-
-                    headers: {
-
-                        "Content-Type":
-                            "application/x-www-form-urlencoded"
-
-                    },
-
-                    body:
-                        new URLSearchParams({
-
-                            action:
-                                "saveCommand",
-
-                            id:
-                                editingCommandId || "",
-
-                            command:
-                                name,
-
-                            name:
-                                name,
-
-                            description:
-                                description,
-
-                            status:
-                                status,
-
-                            session:
-                                session
-
-                        })
-
-                }
-
-            );
-
-
-        const result =
-            await response.json();
-
+document.addEventListener(
+    "keydown",
+    function(event) {
 
         if (
-            !response.ok ||
-            result.success === false
+            event.key === "Enter" &&
+            !document
+                .getElementById("loginBox")
+                .classList.contains("hidden")
         ) {
 
-            if (
-                result.error ===
-                "Nicht angemeldet."
-            ) {
-
-                logout();
-
-                return;
-
-            }
-
-
-            throw new Error(
-
-                result.error ||
-
-                "Befehl konnte nicht gespeichert werden."
-
-            );
+            login();
 
         }
 
-
-        showMessage(
-
-            document.getElementById(
-                "command-result"
-            ),
-
-            editingCommandId
-                ? "✅ Befehl wurde geändert."
-                : "✅ Befehl wurde hinzugefügt.",
-
-            "success"
-
-        );
-
-
-        resetCommandForm();
-
-
-        await loadCommands();
-
-
-    } catch (error) {
-
-        console.error(error);
-
-
-        showMessage(
-
-            document.getElementById(
-                "command-result"
-            ),
-
-            "❌ Fehler: " +
-                error.message,
-
-            "error"
-
-        );
-
     }
+);
 
-}
 
 
-// ========================================
-// BEFEHL BEARBEITEN
-// ========================================
+/* =========================================================
+   AUTOMATISCH EINLOGGEN / SESSION
+   ========================================================= */
 
-function editCommand(id) {
+if (SESSION) {
 
-    const command =
-        commands.find(
-            item =>
-                String(item.id) ===
-                String(id)
-        );
+    checkSession();
 
+    loadStatus();
 
-    if (!command) {
-
-        return;
-
-    }
-
-
-    editingCommandId =
-        command.id;
-
-
-    document
-        .getElementById(
-            "command-form-title"
-        )
-        .textContent =
-        "✏️ Befehl bearbeiten";
-
-
-    document
-        .getElementById(
-            "command-mode"
-        )
-        .textContent =
-        "Bearbeite den ausgewählten Befehl.";
-
-
-    document
-        .getElementById(
-            "command-name"
-        )
-        .value =
-        command.name || "";
-
-
-    document
-        .getElementById(
-            "command-description"
-        )
-        .value =
-        command.description || "";
-
-
-    document
-        .getElementById(
-            "command-status"
-        )
-        .value =
-        command.status === "maintenance"
-            ? "development"
-            : (command.status || "active");
-
-
-    document
-        .getElementById(
-            "save-command"
-        )
-        .textContent =
-        "💾 Änderungen speichern";
-
-
-    document
-        .getElementById(
-            "cancel-command-edit"
-        )
-        .style.display =
-        "inline-block";
-
-
-    document
-        .getElementById(
-            "command-result"
-        )
-        .className =
-        "message";
-
-
-    document
-        .getElementById(
-            "command-name"
-        )
-        .focus();
-
-}
-
-
-// ========================================
-// BEARBEITUNG ABBRECHEN
-// ========================================
-
-function resetCommandForm() {
-
-    editingCommandId =
-        null;
-
-
-    document
-        .getElementById(
-            "command-form-title"
-        )
-        .textContent =
-        "➕ Neuen Befehl hinzufügen";
-
-
-    document
-        .getElementById(
-            "command-mode"
-        )
-        .textContent =
-        "Erstelle einen neuen Eintrag für die Website.";
-
-
-    document
-        .getElementById(
-            "command-name"
-        )
-        .value =
-        "";
-
-
-    document
-        .getElementById(
-            "command-description"
-        )
-        .value =
-        "";
-
-
-    document
-        .getElementById(
-            "command-status"
-        )
-        .value =
-        "active";
-
-
-    document
-        .getElementById(
-            "save-command"
-        )
-        .textContent =
-        "💾 Befehl speichern";
-
-
-    document
-        .getElementById(
-            "cancel-command-edit"
-        )
-        .style.display =
-        "none";
-
-}
-
-
-// ========================================
-// BEFEHL LÖSCHEN
-// ========================================
-
-async function deleteCommand(id) {
-
-    const command =
-        commands.find(
-            item =>
-                String(item.id) ===
-                String(id)
-        );
-
-
-    if (!command) {
-
-        return;
-
-    }
-
-
-    const confirmed =
-        confirm(
-
-            "Möchtest du den Befehl \"" +
-            command.name +
-            "\" wirklich löschen?"
-
-        );
-
-
-    if (!confirmed) {
-
-        return;
-
-    }
-
-
-    try {
-
-        const response =
-            await fetch(
-
-                API_URL,
-
-                {
-
-                    method:
-                        "POST",
-
-                    headers: {
-
-                        "Content-Type":
-                            "application/x-www-form-urlencoded"
-
-                    },
-
-                    body:
-                        new URLSearchParams({
-
-                            action:
-                                "deleteCommand",
-
-                            id:
-                                id,
-
-                            session:
-                                session
-
-                        })
-
-                }
-
-            );
-
-
-        const result =
-            await response.json();
-
-
-        if (
-            !response.ok ||
-            result.success === false
-        ) {
-
-            if (
-                result.error ===
-                "Nicht angemeldet."
-            ) {
-
-                logout();
-
-                return;
-
-            }
-
-
-            throw new Error(
-
-                result.error ||
-
-                "Befehl konnte nicht gelöscht werden."
-
-            );
-
-        }
-
-
-        if (
-            String(editingCommandId) ===
-            String(id)
-        ) {
-
-            resetCommandForm();
-
-        }
-
-
-        await loadCommands();
-
-
-    } catch (error) {
-
-        console.error(error);
-
-
-        showMessage(
-
-            document.getElementById(
-                "command-result"
-            ),
-
-            "❌ Fehler: " +
-                error.message,
-
-            "error"
-
-        );
-
-    }
-
-}
-
-
-// ========================================
-// BUTTONS
-// ========================================
-
-document
-    .getElementById(
-        "save-command"
-    )
-    .addEventListener(
-        "click",
-        saveCommand
-    );
-
-
-document
-    .getElementById(
-        "cancel-command-edit"
-    )
-    .addEventListener(
-        "click",
-        resetCommandForm
-    );
-
-
-// ========================================
-// LOGIN BUTTON
-// ========================================
-
-document
-    .getElementById(
-        "login-button"
-    )
-    .addEventListener(
-        "click",
-        login
-    );
-
-
-// ========================================
-// ENTER-TASTE
-// ========================================
-
-document
-    .getElementById(
-        "password"
-    )
-    .addEventListener(
-
-        "keydown",
-
-        event => {
-
-            if (
-                event.key ===
-                "Enter"
-            ) {
-
-                login();
-
-            }
-
-        }
-
-    );
-
-
-// ========================================
-// LOGOUT
-// ========================================
-
-document
-    .getElementById(
-        "logout-button"
-    )
-    .addEventListener(
-        "click",
-        logout
-    );
-
-
-// ========================================
-// START
-// ========================================
-
-if (session) {
-
-    showAdminPanel();
-
-} else {
-
-    document
-        .getElementById(
-            "login-screen"
-        )
-        .style.display =
-        "block";
+    loadCommands();
 
 }
 
 </script>
-
 
 </body>
 
