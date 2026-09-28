@@ -23,7 +23,8 @@ function jsonp(action) {
             "_" +
             Math.random().toString(36).substring(2);
 
-        const script = document.createElement("script");
+        const script =
+            document.createElement("script");
 
         let finished = false;
 
@@ -37,12 +38,16 @@ function jsonp(action) {
 
             script.remove();
 
-            reject(new Error("Zeitüberschreitung beim Laden der Daten."));
+            reject(
+                new Error(
+                    "Zeitüberschreitung beim Laden der Daten."
+                )
+            );
 
         }, 10000);
 
 
-        function cleanup() {
+        const cleanup = () => {
 
             clearTimeout(timeout);
 
@@ -50,7 +55,7 @@ function jsonp(action) {
 
             script.remove();
 
-        }
+        };
 
 
         window[callbackName] = function (data) {
@@ -74,7 +79,11 @@ function jsonp(action) {
 
             cleanup();
 
-            reject(new Error("Google Apps Script konnte nicht geladen werden."));
+            reject(
+                new Error(
+                    "Google Apps Script konnte nicht geladen werden."
+                )
+            );
 
         };
 
@@ -97,18 +106,22 @@ function jsonp(action) {
 
 
 /* =========================================================
-   STATUS
+   STATUS LADEN
    ========================================================= */
 
 async function loadStatus() {
 
     try {
 
-        const data = await jsonp("status");
+        const data =
+            await jsonp("status");
+
 
         if (!data || !data.success) {
 
-            console.error("Status konnte nicht geladen werden.");
+            console.error(
+                "Status konnte nicht geladen werden."
+            );
 
             applyStatus(DEFAULT_STATUS);
 
@@ -117,15 +130,28 @@ async function loadStatus() {
         }
 
 
+        console.log(
+            "Status vom Server:",
+            data
+        );
+
+
         applyStatus({
 
-            status: data.status || "offline",
+            status:
+                data.status || "offline",
 
-            title: data.title || "Bot Offline",
+            title:
+                data.title ||
+                getDefaultStatusTitle(
+                    data.status
+                ),
 
             text:
                 data.text ||
-                "Der Bot ist derzeit offline."
+                getDefaultStatusText(
+                    data.status
+                )
 
         });
 
@@ -143,6 +169,56 @@ async function loadStatus() {
 }
 
 
+/* =========================================================
+   STANDARD-TEXTE FÜR STATUS
+   ========================================================= */
+
+function getDefaultStatusTitle(status) {
+
+    if (status === "online") {
+
+        return "Bot Online";
+
+    }
+
+
+    if (status === "maintenance") {
+
+        return "Wartungsarbeiten";
+
+    }
+
+
+    return "Bot Offline";
+
+}
+
+
+function getDefaultStatusText(status) {
+
+    if (status === "online") {
+
+        return "Der Bot ist derzeit online.";
+
+    }
+
+
+    if (status === "maintenance") {
+
+        return "Der Bot befindet sich derzeit in Wartungsarbeiten.";
+
+    }
+
+
+    return "Der Bot ist derzeit offline.";
+
+}
+
+
+/* =========================================================
+   STATUS ANZEIGEN
+   ========================================================= */
+
 function applyStatus(data) {
 
     const statusElement =
@@ -158,10 +234,75 @@ function applyStatus(data) {
         document.getElementById("status-indicator");
 
 
+    let status =
+        String(
+            data.status || "offline"
+        ).toLowerCase().trim();
+
+
+    /*
+       Nur gültige Status erlauben
+    */
+
+    if (
+        status !== "online" &&
+        status !== "maintenance" &&
+        status !== "offline"
+    ) {
+
+        status = "offline";
+
+    }
+
+
+    let title =
+        data.title;
+
+
+    let text =
+        data.text;
+
+
+    /*
+       Falls beim Wartungsstatus
+       kein Titel gespeichert wurde,
+       trotzdem den richtigen Titel anzeigen.
+    */
+
+    if (
+        !title ||
+        title.trim() === "" ||
+        (
+            status === "maintenance" &&
+            title.toLowerCase() === "bot offline"
+        )
+    ) {
+
+        title =
+            getDefaultStatusTitle(status);
+
+    }
+
+
+    if (
+        !text ||
+        text.trim() === "" ||
+        (
+            status === "maintenance" &&
+            text.toLowerCase().includes("offline")
+        )
+    ) {
+
+        text =
+            getDefaultStatusText(status);
+
+    }
+
+
     if (titleElement) {
 
         titleElement.textContent =
-            data.title;
+            title;
 
     }
 
@@ -169,7 +310,7 @@ function applyStatus(data) {
     if (textElement) {
 
         textElement.textContent =
-            data.text;
+            text;
 
     }
 
@@ -177,7 +318,7 @@ function applyStatus(data) {
     if (statusElement) {
 
         statusElement.className =
-            "status-card " + data.status;
+            "status-card " + status;
 
     }
 
@@ -185,7 +326,7 @@ function applyStatus(data) {
     if (indicator) {
 
         indicator.className =
-            "status-indicator " + data.status;
+            "status-indicator " + status;
 
     }
 
@@ -205,11 +346,15 @@ async function loadChangelog() {
 
 
         const container =
-            document.getElementById("changelog-list");
+            document.getElementById(
+                "changelog-list"
+            );
 
 
         const section =
-            document.getElementById("changelog");
+            document.getElementById(
+                "changelog"
+            );
 
 
         const navLink =
@@ -218,7 +363,11 @@ async function loadChangelog() {
             );
 
 
-        if (!container) return;
+        if (!container) {
+
+            return;
+
+        }
 
 
         if (
@@ -230,14 +379,16 @@ async function loadChangelog() {
 
             if (section) {
 
-                section.style.display = "none";
+                section.style.display =
+                    "none";
 
             }
 
 
             if (navLink) {
 
-                navLink.style.display = "none";
+                navLink.style.display =
+                    "none";
 
             }
 
@@ -249,14 +400,16 @@ async function loadChangelog() {
 
         if (section) {
 
-            section.style.display = "";
+            section.style.display =
+                "";
 
         }
 
 
         if (navLink) {
 
-            navLink.style.display = "";
+            navLink.style.display =
+                "";
 
         }
 
@@ -274,9 +427,7 @@ async function loadChangelog() {
                 </div>
 
                 <div class="changelog-content">
-                    ${formatChangelog(
-                        data.text
-                    )}
+                    ${formatChangelog(data.text)}
                 </div>
 
             </div>
@@ -292,7 +443,9 @@ async function loadChangelog() {
 
 
         const section =
-            document.getElementById("changelog");
+            document.getElementById(
+                "changelog"
+            );
 
 
         const navLink =
@@ -303,14 +456,16 @@ async function loadChangelog() {
 
         if (section) {
 
-            section.style.display = "none";
+            section.style.display =
+                "none";
 
         }
 
 
         if (navLink) {
 
-            navLink.style.display = "none";
+            navLink.style.display =
+                "none";
 
         }
 
@@ -343,7 +498,9 @@ function escapeHtml(text) {
         document.createElement("div");
 
     div.textContent =
-        text == null ? "" : String(text);
+        text == null
+            ? ""
+            : String(text);
 
     return div.innerHTML;
 
