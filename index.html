@@ -2,664 +2,608 @@
 <html lang="de">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>KavKaz Bot – Status</title>
 
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0f1117;
+            color: white;
+        }
+
+        header {
+            background: #171a23;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #2b3040;
+        }
+
+        header h1 {
+            margin: 0 0 15px;
+        }
+
+        nav a {
+            color: #bbb;
+            text-decoration: none;
+            margin: 0 12px;
+        }
+
+        nav a:hover {
+            color: white;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .hero h2 {
+            font-size: 38px;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            color: #aaa;
+        }
+
+        section {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: #171a23;
+            border: 1px solid #2b3040;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .status {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .online {
+            color: #4ade80;
+        }
+
+        .maintenance {
+            color: #facc15;
+        }
+
+        .offline {
+            color: #f87171;
+        }
+
+        .command-card {
+            background: #171a23;
+            border: 1px solid #2b3040;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .command-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #8b9cff;
+            margin-bottom: 8px;
+        }
+
+        .command-description {
+            color: #bbb;
+            margin-bottom: 10px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            background: #1f8f4d;
+        }
+
+        .badge.inactive {
+            background: #8f2f2f;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+            border-top: 1px solid #2b3040;
+            margin-top: 50px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
-
 
 <body>
 
-
 <header>
-
-    <div class="logo">
-        KAVKAZ
-    </div>
-
+    <h1>KavKaz Bot</h1>
 
     <nav>
-
-        <a href="#status">
-            Status
-        </a>
-
-        <a
-            href="#changelog"
-            id="changelog-nav-link"
-            style="display: none;"
-        >
-            Change Log
-        </a>
-
-        <a href="#commands">
-            Befehle
-        </a>
-
-        <a href="admin.html">
-            Admin
-        </a>
-
+        <a href="#status">Status</a>
+        <a href="#changelog" id="changelogNav" class="hidden">Change Log</a>
+        <a href="#commands">Befehle</a>
+        <a href="admin.html">Admin</a>
     </nav>
-
 </header>
 
 
+<div class="hero">
+    <h2>KavKaz Bot</h2>
+    <p>Discord Bot Status & Informationen</p>
+</div>
 
-<main>
 
+<section id="status">
+    <div class="card">
+        <h2>Bot Status</h2>
 
-    <!-- ================================= -->
-    <!-- HERO -->
-    <!-- ================================= -->
-
-    <section class="hero">
-
-        <div class="hero-content">
-
-            <p class="small-title">
-                DISCORD BOT
-            </p>
-
-            <h1>
-                KavKaz Bot
-            </h1>
-
-            <p class="description">
-                Status, Updates und Informationen rund um den KavKaz Discord Bot.
-            </p>
-
+        <div id="statusTitle" class="status">
+            Wird geladen...
         </div>
 
-    </section>
+        <p id="statusText">
+            Bitte warten...
+        </p>
+    </div>
+</section>
 
 
+<section id="changelog" class="hidden">
 
-    <!-- ================================= -->
-    <!-- STATUS -->
-    <!-- ================================= -->
+    <div class="card">
 
-    <section
-        id="status"
-        class="section"
-    >
+        <h2>Change Log</h2>
 
-        <div class="section-title">
+        <h3 id="changelogTitle"></h3>
 
-            <span>
-                STATUS
-            </span>
+        <p id="changelogText"></p>
 
-            <h2>
-                Bot Status
-            </h2>
+        <small id="changelogDate"></small>
 
+    </div>
+
+</section>
+
+
+<section id="commands">
+
+    <div class="card">
+
+        <h2>Befehle</h2>
+
+        <div id="commandsList">
+            <p>Befehle werden geladen...</p>
         </div>
 
+    </div>
 
-        <div class="status-card">
+</section>
 
-            <div
-                id="status-indicator"
-                class="status-indicator offline"
-            ></div>
-
-
-            <div>
-
-                <h3 id="status-title">
-                    Bot Offline
-                </h3>
-
-                <p id="status-text">
-                    Der aktuelle Status wird geladen...
-                </p>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- ================================= -->
-    <!-- CHANGE LOG -->
-    <!-- ================================= -->
-
-    <section
-        id="changelog"
-        class="section"
-        style="display: none;"
-    >
-
-        <div class="section-title">
-
-            <span>
-                UPDATES
-            </span>
-
-            <h2>
-                Change Log
-            </h2>
-
-        </div>
-
-
-        <div
-            id="changelog-list"
-            class="changelog-list"
-        ></div>
-
-    </section>
-
-
-
-    <!-- ================================= -->
-    <!-- BOT BEFEHLE -->
-    <!-- ================================= -->
-
-    <section
-        id="commands"
-        class="section"
-    >
-
-        <div class="section-title">
-
-            <span>
-                DISCORD
-            </span>
-
-            <h2>
-                Bot Befehle
-            </h2>
-
-        </div>
-
-
-        <div
-            id="commands-list"
-            class="commands-grid"
-        >
-
-            <div class="loading">
-                Befehle werden geladen...
-            </div>
-
-        </div>
-
-    </section>
-
-
-</main>
-
-
-
-<!-- ================================= -->
-<!-- FOOTER -->
-<!-- ================================= -->
 
 <footer>
-
-    <p>
-        © 2026 KavKaz Bot
-    </p>
-
-    <p>
-        Discord Bot &amp; Status System
-    </p>
-
+    KavKaz Bot © 2026
 </footer>
-
-
-
-<script src="script.js"></script>
-
 
 
 <script>
 
-
-const COMMANDS_API =
-    "https://script.google.com/macros/s/AKfycbxj4MyQARTi7sUlHtZHX8Wq6cIX19jLlh596LmJiCdBt49EYwhiG4UK1-bdIwR8ZI1s/exec";
-
-
-// ========================================
-// JSONP FÜR BEFEHLE
-// ========================================
-
-function loadCommandsJSONP() {
-
-    return new Promise(
-        (resolve, reject) => {
-
-            const callbackName =
-                "kavkazCommandsCallback_" +
-                Date.now() +
-                "_" +
-                Math.random()
-                    .toString(36)
-                    .substring(2);
+const API_URL =
+    "https://script.google.com/macros/s/AKfycbxj4MyQARTi7sUlHtZHX8Wq6cIX19jJlh596LmJiCdBt49EYwhiG4UK1-bdIwR8ZI1s/exec";
 
 
-            const script =
-                document.createElement(
-                    "script"
+/* =========================
+   JSONP
+========================= */
+
+function loadJSONP(action) {
+
+    return new Promise((resolve, reject) => {
+
+        const callbackName =
+            "kavkazCallback_" +
+            Date.now() +
+            "_" +
+            Math.floor(Math.random() * 100000);
+
+        const script =
+            document.createElement("script");
+
+        const timeout =
+            setTimeout(() => {
+
+                cleanup();
+
+                reject(
+                    new Error("Zeitüberschreitung")
                 );
 
-
-            let finished =
-                false;
+            }, 10000);
 
 
-            const timeout =
-                setTimeout(
-                    () => {
+        function cleanup() {
 
-                        if (finished) {
-                            return;
-                        }
+            clearTimeout(timeout);
 
-
-                        finished =
-                            true;
-
-
-                        delete window[
-                            callbackName
-                        ];
-
-
-                        script.remove();
-
-
-                        reject(
-                            new Error(
-                                "Zeitüberschreitung beim Laden der Befehle."
-                            )
-                        );
-
-                    },
-                    10000
-                );
-
-
-            function cleanup() {
-
-                clearTimeout(
-                    timeout
-                );
-
-
-                delete window[
-                    callbackName
-                ];
-
-
-                script.remove();
-
+            if (script.parentNode) {
+                script.parentNode.removeChild(script);
             }
 
-
-            window[callbackName] =
-                function(data) {
-
-                    if (finished) {
-                        return;
-                    }
+            delete window[callbackName];
+        }
 
 
-                    finished =
-                        true;
+        window[callbackName] = function(data) {
+
+            cleanup();
+
+            resolve(data);
+
+        };
 
 
-                    cleanup();
+        script.onerror = function() {
 
+            cleanup();
 
-                    resolve(data);
-
-                };
-
-
-            script.onerror =
-                function() {
-
-                    if (finished) {
-                        return;
-                    }
-
-
-                    finished =
-                        true;
-
-
-                    cleanup();
-
-
-                    reject(
-                        new Error(
-                            "Google Apps Script konnte nicht geladen werden."
-                        )
-                    );
-
-                };
-
-
-            script.src =
-                COMMANDS_API +
-                "?action=commands" +
-                "&callback=" +
-                encodeURIComponent(
-                    callbackName
-                ) +
-                "&_=" +
-                Date.now();
-
-
-            document.body.appendChild(
-                script
+            reject(
+                new Error("API konnte nicht geladen werden")
             );
 
-        }
-    );
+        };
+
+
+        script.src =
+            API_URL +
+            "?action=" +
+            encodeURIComponent(action) +
+            "&callback=" +
+            encodeURIComponent(callbackName) +
+            "&_=" +
+            Date.now();
+
+
+        document.body.appendChild(script);
+
+    });
 
 }
 
 
+/* =========================
+   STATUS
+========================= */
 
-// ========================================
-// BOT BEFEHLE LADEN
-// ========================================
+async function loadStatus() {
+
+    try {
+
+        const data =
+            await loadJSONP("status");
+
+
+        if (!data || !data.success) {
+
+            throw new Error(
+                data?.error || "Status konnte nicht geladen werden."
+            );
+
+        }
+
+
+        const status =
+            data.status || "offline";
+
+
+        const title =
+            data.title || "Bot Offline";
+
+
+        const text =
+            data.text ||
+            "Der Bot ist derzeit offline.";
+
+
+        const titleElement =
+            document.getElementById("statusTitle");
+
+        const textElement =
+            document.getElementById("statusText");
+
+
+        titleElement.textContent =
+            title;
+
+        textElement.textContent =
+            text;
+
+
+        titleElement.className =
+            "status " + status;
+
+
+    } catch (error) {
+
+        console.error(
+            "Status Fehler:",
+            error
+        );
+
+        document.getElementById(
+            "statusTitle"
+        ).textContent =
+            "Bot Offline";
+
+
+        document.getElementById(
+            "statusText"
+        ).textContent =
+            "Der Status konnte nicht geladen werden.";
+
+    }
+
+}
+
+
+/* =========================
+   CHANGE LOG
+========================= */
+
+async function loadChangelog() {
+
+    try {
+
+        const data =
+            await loadJSONP("changelog");
+
+
+        if (!data || !data.success) {
+            return;
+        }
+
+
+        const changelog =
+            data.changelog;
+
+
+        if (
+            !changelog ||
+            !changelog.text ||
+            !changelog.text.trim()
+        ) {
+
+            document
+                .getElementById("changelog")
+                .classList.add("hidden");
+
+            document
+                .getElementById("changelogNav")
+                .classList.add("hidden");
+
+            return;
+
+        }
+
+
+        document
+            .getElementById("changelog")
+            .classList.remove("hidden");
+
+
+        document
+            .getElementById("changelogNav")
+            .classList.remove("hidden");
+
+
+        document
+            .getElementById("changelogTitle")
+            .textContent =
+            changelog.title || "Neue Änderung";
+
+
+        document
+            .getElementById("changelogText")
+            .textContent =
+            changelog.text;
+
+
+        document
+            .getElementById("changelogDate")
+            .textContent =
+            changelog.date || "";
+
+    } catch (error) {
+
+        console.error(
+            "Change Log Fehler:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================
+   BEFEHLE
+========================= */
 
 async function loadCommands() {
 
     const container =
-        document.getElementById(
-            "commands-list"
-        );
-
-
-    if (!container) {
-        return;
-    }
+        document.getElementById("commandsList");
 
 
     try {
 
         const data =
-            await loadCommandsJSONP();
+            await loadJSONP("commands");
 
 
         console.log(
-            "Befehle vom Server:",
+            "Commands API:",
             data
         );
 
 
-        if (
-            !data ||
-            !data.success
-        ) {
+        if (!data || !data.success) {
 
             throw new Error(
-                data &&
-                data.error
-                    ? data.error
-                    : "Befehle konnten nicht geladen werden."
+                data?.error ||
+                "Befehle konnten nicht geladen werden."
             );
 
         }
 
 
         const commands =
-            Array.isArray(
-                data.commands
-            )
+            Array.isArray(data.commands)
                 ? data.commands
                 : [];
 
 
-        renderCommands(
-            commands
-        );
+        container.innerHTML = "";
 
 
-    } catch (error) {
+        if (commands.length === 0) {
 
-        console.error(
-            "Fehler beim Laden der Befehle:",
-            error
-        );
+            container.innerHTML =
+                "<p>Aktuell sind keine Befehle eingetragen.</p>";
 
+            return;
 
-        container.innerHTML = `
-
-            <div class="loading">
-
-                Befehle konnten nicht geladen werden.
-
-            </div>
-
-        `;
-
-    }
-
-}
+        }
 
 
-
-// ========================================
-// BEFEHLE ANZEIGEN
-// ========================================
-
-function renderCommands(commands) {
-
-    const container =
-        document.getElementById(
-            "commands-list"
-        );
-
-
-    if (!container) {
-        return;
-    }
-
-
-    container.innerHTML = "";
-
-
-    if (commands.length === 0) {
-
-        container.innerHTML = `
-
-            <div class="loading">
-
-                Aktuell sind keine Befehle eingetragen.
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    commands.forEach(
-        command => {
+        commands.forEach(command => {
 
             const card =
-                document.createElement(
-                    "div"
-                );
-
+                document.createElement("div");
 
             card.className =
                 "command-card";
 
 
-            // ========================================
-            // STATUS
-            // ========================================
-
-            let statusText =
-                "Aktiv";
-
-            let statusIcon =
-                "🟢";
-
-            let statusClass =
-                "active";
-
-
-            if (
-                command.status ===
-                "maintenance"
-            ) {
-
-                statusText =
-                    "Wartung";
-
-                statusIcon =
-                    "🟠";
-
-                statusClass =
-                    "maintenance";
-
-            }
-
-            else if (
-                command.status ===
-                "disabled"
-            ) {
-
-                statusText =
-                    "Deaktiviert";
-
-                statusIcon =
-                    "🔴";
-
-                statusClass =
-                    "disabled";
-
-            }
-
-
-            // ========================================
-            // BEFEHL
-            // ========================================
-
-            const commandName =
-                document.createElement(
-                    "div"
-                );
-
-
-            commandName.className =
-                "command";
-
-
-            commandName.textContent =
+            const name =
                 command.name ||
                 command.command ||
                 "Unbekannter Befehl";
 
 
-            // ========================================
-            // BESCHREIBUNG
-            // ========================================
-
             const description =
-                document.createElement(
-                    "p"
-                );
-
-
-            description.textContent =
                 command.description ||
                 "Keine Beschreibung vorhanden.";
 
 
-            // ========================================
-            // STATUS BADGE
-            // ========================================
-
             const status =
-                document.createElement(
-                    "div"
-                );
+                command.status ||
+                "active";
 
 
-            status.className =
-                "command-status " +
-                statusClass;
+            card.innerHTML = `
+
+                <div class="command-name">
+                    ${escapeHTML(name)}
+                </div>
+
+                <div class="command-description">
+                    ${escapeHTML(description)}
+                </div>
+
+                <span class="badge ${
+                    status === "active"
+                        ? ""
+                        : "inactive"
+                }">
+
+                    ${
+                        status === "active"
+                            ? "Aktiv"
+                            : "Inaktiv"
+                    }
+
+                </span>
+
+            `;
 
 
-            status.textContent =
-                statusIcon +
-                " " +
-                statusText;
+            container.appendChild(card);
+
+        });
 
 
-            // ========================================
-            // ZUSAMMENBAUEN
-            // ========================================
+    } catch (error) {
 
-            card.appendChild(
-                commandName
-            );
-
-
-            card.appendChild(
-                description
-            );
+        console.error(
+            "Befehle Fehler:",
+            error
+        );
 
 
-            card.appendChild(
-                status
-            );
+        container.innerHTML =
+            "<p>Befehle konnten nicht geladen werden.</p>";
 
-
-            container.appendChild(
-                card
-            );
-
-        }
-    );
+    }
 
 }
 
 
+/* =========================
+   HTML SICHERHEIT
+========================= */
 
-// ========================================
-// BEFEHLE BEIM START LADEN
-// ========================================
+function escapeHTML(value) {
+
+    return String(value)
+
+        .replace(/&/g, "&amp;")
+
+        .replace(/</g, "&lt;")
+
+        .replace(/>/g, "&gt;")
+
+        .replace(/"/g, "&quot;")
+
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =========================
+   START
+========================= */
 
 document.addEventListener(
     "DOMContentLoaded",
-    () => {
+    function() {
+
+        loadStatus();
+
+        loadChangelog();
 
         loadCommands();
 
     }
 );
 
-
 </script>
 
-
 </body>
-
 </html>
