@@ -459,11 +459,16 @@
 <script>
 
 
+// ========================================
+// API
+// ========================================
+
 const API_URL =
     "https://script.google.com/macros/s/AKfycbxj4MyQARTi7sUlHtZHX8Wq6cIX19jJlh596LmJiCdBt49EYwhiG4UK1-bdIwR8ZI1s/exec";
 
 
 let selectedStatus = "offline";
+
 
 let session =
     sessionStorage.getItem(
@@ -475,7 +480,7 @@ let session =
 // LOGIN
 // ========================================
 
-async function login() {
+function login() {
 
     const username =
         document
@@ -513,77 +518,133 @@ async function login() {
     }
 
 
-    try {
+    // ========================================
+    // JSONP CALLBACK
+    // ========================================
 
-        const response =
-            await fetch(
-                API_URL,
-                {
+    const callbackName =
+        "kavkazLogin_" +
+        Date.now();
 
-                    method: "POST",
 
-                    headers: {
-                        "Content-Type":
-                            "application/x-www-form-urlencoded"
-                    },
+    window[callbackName] =
+        function(result) {
 
-                    body:
-                        new URLSearchParams({
+            try {
 
-                            action: "login",
+                if (
+                    !result ||
+                    result.success === false
+                ) {
 
-                            username:
-                                username,
+                    throw new Error(
 
-                            password:
-                                password
+                        result &&
+                        result.error
 
-                        })
+                            ? result.error
+
+                            : "Login fehlgeschlagen."
+
+                    );
 
                 }
-            );
 
 
-        const result =
-            await response.json();
+                session =
+                    result.session;
 
 
-        if (
-            !response.ok ||
-            result.success === false
-        ) {
+                sessionStorage.setItem(
 
-            throw new Error(
-                result.error ||
-                "Login fehlgeschlagen."
-            );
+                    "kavkaz_admin_session",
 
-        }
+                    session
+
+                );
 
 
-        session =
-            result.session;
+                showAdminPanel();
 
 
-        sessionStorage.setItem(
-            "kavkaz_admin_session",
-            session
+            } catch (error) {
+
+                errorBox.textContent =
+                    "❌ " +
+                    error.message;
+
+                errorBox.style.display =
+                    "block";
+
+            }
+
+
+            // Callback wieder entfernen
+
+            delete window[callbackName];
+
+
+            const oldScript =
+                document.getElementById(
+                    "kavkaz-login-script"
+                );
+
+
+            if (oldScript) {
+
+                oldScript.remove();
+
+            }
+
+        };
+
+
+    // ========================================
+    // SCRIPT ERSTELLEN
+    // ========================================
+
+    const script =
+        document.createElement(
+            "script"
         );
 
 
-        showAdminPanel();
+    script.id =
+        "kavkaz-login-script";
 
 
-    } catch (error) {
+    script.src =
+        API_URL +
+        "?action=login" +
+        "&username=" +
+        encodeURIComponent(username) +
+        "&password=" +
+        encodeURIComponent(password) +
+        "&callback=" +
+        encodeURIComponent(callbackName);
 
-        errorBox.textContent =
-            "❌ " +
-            error.message;
 
-        errorBox.style.display =
-            "block";
+    script.onerror =
+        function() {
 
-    }
+            errorBox.textContent =
+                "❌ Verbindung zum Login-Server fehlgeschlagen.";
+
+            errorBox.style.display =
+                "block";
+
+
+            delete window[callbackName];
+
+
+            script.remove();
+
+        };
+
+
+    document
+        .body
+        .appendChild(script);
 
 }
 
@@ -621,7 +682,8 @@ function showAdminPanel() {
 
 function logout() {
 
-    session = null;
+    session =
+        null;
 
 
     sessionStorage.removeItem(
@@ -644,39 +706,41 @@ const statusButtons =
     );
 
 
-statusButtons.forEach(button => {
+statusButtons.forEach(
+    button => {
 
-    button.addEventListener(
-        "click",
-        () => {
+        button.addEventListener(
+            "click",
+            () => {
 
-            statusButtons.forEach(
-                btn => {
+                statusButtons.forEach(
+                    btn => {
 
-                    btn.classList.remove(
-                        "selected"
-                    );
+                        btn.classList.remove(
+                            "selected"
+                        );
 
-                }
-            );
-
-
-            button.classList.add(
-                "selected"
-            );
+                    }
+                );
 
 
-            selectedStatus =
-                button.dataset.status;
+                button.classList.add(
+                    "selected"
+                );
 
-        }
-    );
 
-});
+                selectedStatus =
+                    button.dataset.status;
+
+            }
+        );
+
+    }
+);
 
 
 // ========================================
-// NACHRICHT
+// NACHRICHTEN
 // ========================================
 
 function showMessage(
@@ -690,7 +754,8 @@ function showMessage(
 
 
     element.className =
-        "message " + type;
+        "message " +
+        type;
 
 }
 
@@ -714,10 +779,13 @@ async function saveStatus() {
 
         const response =
             await fetch(
+
                 API_URL,
+
                 {
 
-                    method: "POST",
+                    method:
+                        "POST",
 
                     headers: {
 
@@ -729,7 +797,8 @@ async function saveStatus() {
                     body:
                         new URLSearchParams({
 
-                            action: "status",
+                            action:
+                                "status",
 
                             status:
                                 selectedStatus,
@@ -743,6 +812,7 @@ async function saveStatus() {
                         })
 
                 }
+
             );
 
 
@@ -768,8 +838,11 @@ async function saveStatus() {
 
 
             throw new Error(
+
                 result.error ||
+
                 "Status konnte nicht gespeichert werden."
+
             );
 
         }
@@ -859,10 +932,13 @@ async function addChangelog() {
 
         const response =
             await fetch(
+
                 API_URL,
+
                 {
 
-                    method: "POST",
+                    method:
+                        "POST",
 
                     headers: {
 
@@ -886,6 +962,7 @@ async function addChangelog() {
                         })
 
                 }
+
             );
 
 
@@ -913,6 +990,7 @@ async function addChangelog() {
             throw new Error(
 
                 result.error ||
+
                 "Change Log konnte nicht gesendet werden."
 
             );
@@ -983,13 +1061,17 @@ async function loadStatus() {
 
         const response =
             await fetch(
+
                 API_URL +
                 "?action=status"
+
             );
 
 
         if (!response.ok) {
+
             return;
+
         }
 
 
@@ -1032,8 +1114,11 @@ async function loadStatus() {
     } catch (error) {
 
         console.error(
+
             "Status konnte nicht geladen werden:",
+
             error
+
         );
 
     }
@@ -1055,17 +1140,23 @@ document
     );
 
 
-// Enter-Taste beim Login
+// ========================================
+// ENTER-TASTE
+// ========================================
+
 document
     .getElementById(
         "password"
     )
     .addEventListener(
+
         "keydown",
+
         event => {
 
             if (
-                event.key === "Enter"
+                event.key ===
+                "Enter"
             ) {
 
                 login();
@@ -1073,10 +1164,14 @@ document
             }
 
         }
+
     );
 
 
-// Logout
+// ========================================
+// LOGOUT
+// ========================================
+
 document
     .getElementById(
         "logout-button"
