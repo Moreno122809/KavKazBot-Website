@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
@@ -71,7 +71,7 @@
         }
 
         textarea {
-            min-height: 130px;
+            min-height: 250px;
             resize: vertical;
         }
 
@@ -95,15 +95,6 @@
             background: #4752c4;
         }
 
-        .delete-button {
-            background: #ef4444;
-            margin-top: 15px;
-        }
-
-        .delete-button:hover {
-            background: #dc2626;
-        }
-
         .message {
             margin-top: 15px;
             padding: 12px;
@@ -123,34 +114,18 @@
             color: #f87171;
         }
 
-        .admin-entry {
-            border: 1px solid #252a34;
-            background: #0c0f14;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-        }
-
-        .admin-entry h3 {
-            margin-bottom: 8px;
-        }
-
-        .admin-entry .date {
-            color: #7d8cff;
-            font-size: 13px;
-            margin-bottom: 10px;
-        }
-
-        .admin-entry p {
-            color: #aeb4c0;
-            line-height: 1.5;
-        }
-
         .back-link {
             display: inline-block;
             margin-top: 20px;
             color: #8d96ff;
             text-decoration: none;
+        }
+
+        .hint {
+            color: #8d94a1;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
         }
 
         @media (max-width: 700px) {
@@ -164,47 +139,83 @@
 <body>
 
 <header>
-    <div class="logo">KAVKAZ ADMIN</div>
+
+    <div class="logo">
+        KAVKAZ ADMIN
+    </div>
 
     <nav>
-        <a href="index.html">Website</a>
+        <a href="index.html">
+            Website
+        </a>
     </nav>
+
 </header>
+
 
 <main>
 
     <div class="admin-container">
 
         <div class="section-title">
-            <span>ADMIN PANEL</span>
-            <h2>KavKaz Bot Verwaltung</h2>
+
+            <span>
+                ADMIN PANEL
+            </span>
+
+            <h2>
+                KavKaz Bot Verwaltung
+            </h2>
+
         </div>
+
+
+        <!-- ================================= -->
+        <!-- BOT STATUS -->
+        <!-- ================================= -->
 
         <div class="admin-card">
 
-            <h2>Bot Status</h2>
+            <h2>
+                Bot Status
+            </h2>
+
 
             <div class="status-buttons">
 
-                <button class="status-button" data-status="online">
+                <button
+                    class="status-button"
+                    data-status="online"
+                >
                     🟢 Online
                 </button>
 
-                <button class="status-button" data-status="maintenance">
+
+                <button
+                    class="status-button"
+                    data-status="maintenance"
+                >
                     🟠 Wartungsarbeiten
                 </button>
 
-                <button class="status-button" data-status="offline">
+
+                <button
+                    class="status-button"
+                    data-status="offline"
+                >
                     🔴 Offline
                 </button>
 
             </div>
 
+
             <br>
+
 
             <label for="status-message">
                 Status-Nachricht
             </label>
+
 
             <input
                 id="status-message"
@@ -212,56 +223,78 @@
                 placeholder="z.B. Der Bot läuft problemlos."
             >
 
-            <button id="save-status" class="admin-button">
+
+            <button
+                id="save-status"
+                class="admin-button"
+            >
                 Status speichern
             </button>
 
-            <div id="status-result" class="message"></div>
+
+            <div
+                id="status-result"
+                class="message"
+            ></div>
 
         </div>
 
 
+        <!-- ================================= -->
+        <!-- CHANGE LOG -->
+        <!-- ================================= -->
+
         <div class="admin-card">
 
-            <h2>Change Log erstellen</h2>
+            <h2>
+                Discord Change Log
+            </h2>
 
-            <label for="changelog-title">
-                Titel
-            </label>
 
-            <input
-                id="changelog-title"
-                type="text"
-                placeholder="z.B. Update 1.4"
-            >
+            <p class="hint">
+                Schreibe hier den kompletten Change Log hinein.
+                Der Text wird direkt als normale Discord-Nachricht
+                in den Change-Log-Kanal gesendet.
+            </p>
+
 
             <label for="changelog-text">
-                Beschreibung
+                Change Log
             </label>
+
 
             <textarea
                 id="changelog-text"
-                placeholder="Was wurde geändert?"
+                placeholder="**Changes:**
+
+- Neuer Punkt
+
+**Fixes:**
+
+- Fehler behoben."
             ></textarea>
 
-            <button id="add-changelog" class="admin-button">
-                Change Log veröffentlichen
+
+            <button
+                id="add-changelog"
+                class="admin-button"
+            >
+                📢 Change Log veröffentlichen
             </button>
 
-            <div id="changelog-result" class="message"></div>
+
+            <div
+                id="changelog-result"
+                class="message"
+            ></div>
 
         </div>
 
 
-        <div class="admin-card">
-
-            <h2>Vorhandene Change Logs</h2>
-
-            <div id="admin-changelog-list"></div>
-
-        </div>
-
-        <a class="back-link" href="index.html">
+        <a
+            class="back-link"
+            href="index.html"
+        >
             ← Zur öffentlichen Website
         </a>
 
@@ -269,201 +302,215 @@
 
 </main>
 
+
 <script>
 
-let selectedStatus = "offline";
 
-const statusButtons = document.querySelectorAll(".status-button");
+// ========================================
+// API
+// ========================================
+
+const API_URL =
+    "http://78.154.103.53:10785";
+
+
+// ========================================
+// STATUS
+// ========================================
+
+let selectedStatus =
+    "offline";
+
+
+const statusButtons =
+    document.querySelectorAll(
+        ".status-button"
+    );
+
 
 statusButtons.forEach(button => {
 
-    button.addEventListener("click", () => {
+    button.addEventListener(
+        "click",
+        () => {
 
-        statusButtons.forEach(btn => {
-            btn.classList.remove("selected");
-        });
+            statusButtons.forEach(btn => {
 
-        button.classList.add("selected");
+                btn.classList.remove(
+                    "selected"
+                );
 
-        selectedStatus = button.dataset.status;
+            });
 
-    });
+
+            button.classList.add(
+                "selected"
+            );
+
+
+            selectedStatus =
+                button.dataset.status;
+
+        }
+    );
 
 });
 
 
-function showMessage(element, text, type) {
+// ========================================
+// MELDUNG ANZEIGEN
+// ========================================
 
-    element.textContent = text;
+function showMessage(
+    element,
+    text,
+    type
+) {
 
-    element.className = "message " + type;
+    element.textContent =
+        text;
+
+
+    element.className =
+        "message " + type;
 
 }
 
 
-function saveStatus() {
+// ========================================
+// STATUS SPEICHERN
+// ========================================
+
+async function saveStatus() {
 
     const message =
-        document.getElementById("status-message").value.trim();
+        document
+            .getElementById(
+                "status-message"
+            )
+            .value
+            .trim();
 
-    const data = {
-
-        status: selectedStatus,
-
-        text: message
-
-    };
-
-    localStorage.setItem(
-        "kavkaz_status",
-        JSON.stringify(data)
-    );
-
-    showMessage(
-        document.getElementById("status-result"),
-        "Status wurde gespeichert.",
-        "success"
-    );
-
-}
-
-
-document
-    .getElementById("save-status")
-    .addEventListener("click", saveStatus);
-
-
-function loadStatus() {
-
-    const saved =
-        localStorage.getItem("kavkaz_status");
-
-    if (!saved) return;
 
     try {
 
-        const data = JSON.parse(saved);
+        const response =
+            await fetch(
+                `${API_URL}/api/status`,
+                {
+                    method: "POST",
 
-        selectedStatus = data.status || "offline";
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-        statusButtons.forEach(button => {
+                    body: JSON.stringify({
 
-            if (button.dataset.status === selectedStatus) {
-                button.classList.add("selected");
-            }
+                        status:
+                            selectedStatus,
 
-        });
+                        text:
+                            message
 
-        document.getElementById("status-message").value =
-            data.text || "";
-
-    } catch (error) {
-
-        console.error(error);
-
-    }
-
-}
-
-
-function getChangelog() {
-
-    const saved =
-        localStorage.getItem("kavkaz_changelog");
-
-    if (!saved) return [];
-
-    try {
-
-        return JSON.parse(saved);
-
-    } catch (error) {
-
-        return [];
-
-    }
-
-}
+                    })
+                }
+            );
 
 
-function saveChangelog(entries) {
-
-    localStorage.setItem(
-        "kavkaz_changelog",
-        JSON.stringify(entries)
-    );
-
-}
+        const result =
+            await response.json();
 
 
-function displayAdminChangelog() {
+        if (!response.ok) {
 
-    const list =
-        document.getElementById("admin-changelog-list");
+            throw new Error(
+                result.error ||
+                "Status konnte nicht gespeichert werden."
+            );
 
-    const entries = getChangelog();
+        }
 
-    list.innerHTML = "";
-
-    if (entries.length === 0) {
-
-        list.innerHTML =
-            "<p style='color:#8d94a1'>Noch keine Einträge vorhanden.</p>";
-
-        return;
-
-    }
-
-
-    entries.forEach((entry, index) => {
-
-        const item =
-            document.createElement("div");
-
-        item.className = "admin-entry";
-
-        item.innerHTML = `
-
-            <h3>${escapeHtml(entry.title)}</h3>
-
-            <div class="date">
-                ${escapeHtml(entry.date)}
-            </div>
-
-            <p>
-                ${escapeHtml(entry.text)}
-            </p>
-
-            <button
-                class="admin-button delete-button"
-                onclick="deleteChangelog(${index})">
-                Eintrag löschen
-            </button>
-
-        `;
-
-        list.appendChild(item);
-
-    });
-
-}
-
-
-function addChangelog() {
-
-    const title =
-        document.getElementById("changelog-title").value.trim();
-
-    const text =
-        document.getElementById("changelog-text").value.trim();
-
-
-    if (!title || !text) {
 
         showMessage(
-            document.getElementById("changelog-result"),
-            "Bitte Titel und Beschreibung eingeben.",
+
+            document.getElementById(
+                "status-result"
+            ),
+
+            "Status wurde erfolgreich gespeichert.",
+
+            "success"
+
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+
+        showMessage(
+
+            document.getElementById(
+                "status-result"
+            ),
+
+            "Fehler: " +
+                error.message,
+
             "error"
+
+        );
+
+    }
+
+}
+
+
+// ========================================
+// STATUS BUTTON
+// ========================================
+
+document
+    .getElementById(
+        "save-status"
+    )
+    .addEventListener(
+        "click",
+        saveStatus
+    );
+
+
+// ========================================
+// CHANGE LOG AN DISCORD SENDEN
+// ========================================
+
+async function addChangelog() {
+
+    const text =
+        document
+            .getElementById(
+                "changelog-text"
+            )
+            .value
+            .trim();
+
+
+    if (!text) {
+
+        showMessage(
+
+            document.getElementById(
+                "changelog-result"
+            ),
+
+            "Bitte zuerst einen Change Log eingeben.",
+
+            "error"
+
         );
 
         return;
@@ -471,77 +518,184 @@ function addChangelog() {
     }
 
 
-    const entries = getChangelog();
+    try {
 
-    const now = new Date();
+        const response =
+            await fetch(
+                `${API_URL}/api/changelog`,
+                {
+                    method: "POST",
 
-    const date =
-        now.toLocaleDateString("de-DE");
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
+                    body: JSON.stringify({
 
-    entries.unshift({
+                        text:
+                            text
 
-        title: title,
+                    })
 
-        text: text,
-
-        date: date
-
-    });
-
-
-    saveChangelog(entries);
-
-    document.getElementById("changelog-title").value = "";
-
-    document.getElementById("changelog-text").value = "";
+                }
+            );
 
 
-    displayAdminChangelog();
+        const result =
+            await response.json();
 
 
-    showMessage(
-        document.getElementById("changelog-result"),
-        "Change Log wurde veröffentlicht.",
-        "success"
-    );
+        if (!response.ok) {
+
+            throw new Error(
+
+                result.error ||
+                "Change Log konnte nicht gesendet werden."
+
+            );
+
+        }
+
+
+        showMessage(
+
+            document.getElementById(
+                "changelog-result"
+            ),
+
+            "✅ Change Log wurde erfolgreich an Discord gesendet.",
+
+            "success"
+
+        );
+
+
+        // Textfeld leeren
+
+        document
+            .getElementById(
+                "changelog-text"
+            )
+            .value = "";
+
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+
+        showMessage(
+
+            document.getElementById(
+                "changelog-result"
+            ),
+
+            "❌ Fehler: " +
+                error.message,
+
+            "error"
+
+        );
+
+    }
 
 }
 
+
+// ========================================
+// CHANGE LOG BUTTON
+// ========================================
 
 document
-    .getElementById("add-changelog")
-    .addEventListener("click", addChangelog);
+    .getElementById(
+        "add-changelog"
+    )
+    .addEventListener(
+        "click",
+        addChangelog
+    );
 
 
-function deleteChangelog(index) {
+// ========================================
+// STATUS VON WISBYTE LADEN
+// ========================================
 
-    const entries = getChangelog();
+async function loadStatus() {
 
-    entries.splice(index, 1);
+    try {
 
-    saveChangelog(entries);
+        const response =
+            await fetch(
+                `${API_URL}/api/status`
+            );
 
-    displayAdminChangelog();
+
+        if (!response.ok) {
+
+            return;
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        selectedStatus =
+            data.status ||
+            "offline";
+
+
+        statusButtons.forEach(
+            button => {
+
+                if (
+                    button.dataset.status ===
+                    selectedStatus
+                ) {
+
+                    button.classList.add(
+                        "selected"
+                    );
+
+                }
+
+            }
+        );
+
+
+        document
+            .getElementById(
+                "status-message"
+            )
+            .value =
+                data.text ||
+                "";
+
+
+    } catch (error) {
+
+        console.error(
+
+            "Status konnte nicht geladen werden:",
+
+            error
+
+        );
+
+    }
 
 }
 
 
-function escapeHtml(text) {
-
-    const div =
-        document.createElement("div");
-
-    div.textContent =
-        text || "";
-
-    return div.innerHTML;
-
-}
-
+// ========================================
+// START
+// ========================================
 
 loadStatus();
-displayAdminChangelog();
 
 </script>
 
