@@ -773,14 +773,18 @@ function login() {
 
     const username =
         document
-            .getElementById("username")
+            .getElementById(
+                "username"
+            )
             .value
             .trim();
 
 
     const password =
         document
-            .getElementById("password")
+            .getElementById(
+                "password"
+            )
             .value;
 
 
@@ -1728,6 +1732,19 @@ async function saveCommand() {
                             id:
                                 editingCommandId || "",
 
+                            /*
+                             * WICHTIG:
+                             * Das Backend erwartet den
+                             * Befehlsnamen unter "command".
+                             */
+                            command:
+                                name,
+
+                            /*
+                             * "name" bleibt ebenfalls
+                             * enthalten, damit die bisherige
+                             * Speicherung kompatibel bleibt.
+                             */
                             name:
                                 name,
 
