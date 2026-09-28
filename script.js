@@ -36,9 +36,7 @@ function setStatus(statusData) {
 
 
     if (!indicator || !title || !text) {
-
         return;
-
     }
 
 
@@ -71,16 +69,12 @@ function setStatus(statusData) {
 function getStatusTitle(status) {
 
     if (status === "online") {
-
         return "Bot Online";
-
     }
 
 
     if (status === "maintenance") {
-
         return "Wartungsarbeiten";
-
     }
 
 
@@ -114,9 +108,7 @@ function displayChangelog(changelog) {
 
 
     if (!section || !list) {
-
         return;
-
     }
 
 
@@ -228,23 +220,12 @@ function formatChangelogText(text) {
         );
 
 
-    // ========================================
-    // **FETT**
-    // ========================================
-
     result =
         result.replace(
-
             /\*\*(.*?)\*\*/g,
-
             "<strong>$1</strong>"
-
         );
 
-
-    // ========================================
-    // ZEILENUMBRÜCHE
-    // ========================================
 
     result =
         result.replace(
@@ -302,11 +283,22 @@ async function loadStatus() {
 
     try {
 
+        // Cache verhindern
+        const url =
+            API_URL +
+            "?action=status&_=" +
+            Date.now();
+
+
         const response =
             await fetch(
 
-                API_URL +
-                "?action=status"
+                url,
+
+                {
+                    method: "GET",
+                    cache: "no-store"
+                }
 
             );
 
@@ -322,6 +314,27 @@ async function loadStatus() {
 
         const data =
             await response.json();
+
+
+        console.log(
+            "KavKaz Status:",
+            data
+        );
+
+
+        if (
+            !data ||
+            data.success === false
+        ) {
+
+            throw new Error(
+                data &&
+                data.error
+                    ? data.error
+                    : "Status konnte nicht geladen werden."
+            );
+
+        }
 
 
         setStatus({
@@ -369,11 +382,22 @@ async function loadChangelog() {
 
     try {
 
+        // Cache verhindern
+        const url =
+            API_URL +
+            "?action=changelog&_=" +
+            Date.now();
+
+
         const response =
             await fetch(
 
-                API_URL +
-                "?action=changelog"
+                url,
+
+                {
+                    method: "GET",
+                    cache: "no-store"
+                }
 
             );
 
@@ -389,6 +413,12 @@ async function loadChangelog() {
 
         const result =
             await response.json();
+
+
+        console.log(
+            "KavKaz Change Log:",
+            result
+        );
 
 
         if (
@@ -423,9 +453,6 @@ async function loadChangelog() {
             error
         );
 
-
-        // Bei Fehlern wird der Bereich
-        // sicherheitshalber ausgeblendet.
 
         displayChangelog(
             null
