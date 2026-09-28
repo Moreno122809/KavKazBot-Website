@@ -1,10 +1,6 @@
 const API_URL =
-    "https://script.google.com/macros/s/AKfycbxj4MyQARTi7sUlHtZHX8Wq6cIX19jLlh596LmJiCdBt49EYwhiG4UK1-bdIwR8ZI1s/exec";
+    "https://script.google.com/macros/s/AKfycbxj4MyQARTi7sUlHtZHX8Wq6cIX19jJlh596LmJiCdBt49EYwhiG4UK1-bdIwR8ZI1s/exec";
 
-
-// ========================================
-// STANDARD STATUS
-// ========================================
 
 const DEFAULT_STATUS = {
     status: "offline",
@@ -13,349 +9,125 @@ const DEFAULT_STATUS = {
 };
 
 
-// ========================================
-// STATUS ANZEIGEN
-// ========================================
+/* =========================================================
+   JSONP
+   ========================================================= */
 
-function setStatus(statusData) {
+function jsonp(action) {
 
-    const indicator =
-        document.getElementById(
-            "status-indicator"
-        );
+    return new Promise((resolve, reject) => {
 
-    const title =
-        document.getElementById(
-            "status-title"
-        );
+        const callbackName =
+            "kavkazCallback_" +
+            Date.now() +
+            "_" +
+            Math.random().toString(36).substring(2);
 
-    const text =
-        document.getElementById(
-            "status-text"
-        );
+        const script = document.createElement("script");
 
+        let finished = false;
 
-    if (!indicator || !title || !text) {
-        return;
-    }
+        const timeout = setTimeout(() => {
 
+            if (finished) return;
 
-    const status =
-        statusData.status ||
-        "offline";
+            finished = true;
 
+            delete window[callbackName];
 
-    indicator.className =
-        "status-indicator " +
-        status;
+            script.remove();
+
+            reject(new Error("Zeitüberschreitung beim Laden der Daten."));
+
+        }, 10000);
 
 
-    title.textContent =
-        statusData.title ||
-        getStatusTitle(status);
+        function cleanup() {
 
+            clearTimeout(timeout);
 
-    text.textContent =
-        statusData.text ||
-        "Der aktuelle Status ist nicht verfügbar.";
+            delete window[callbackName];
 
-}
-
-
-// ========================================
-// STATUS TITEL
-// ========================================
-
-function getStatusTitle(status) {
-
-    if (status === "online") {
-        return "Bot Online";
-    }
-
-
-    if (status === "maintenance") {
-        return "Wartungsarbeiten";
-    }
-
-
-    return "Bot Offline";
-
-}
-
-
-// ========================================
-// CHANGE LOG ANZEIGEN
-// ========================================
-
-function displayChangelog(changelog) {
-
-    const section =
-        document.getElementById(
-            "changelog"
-        );
-
-
-    const list =
-        document.getElementById(
-            "changelog-list"
-        );
-
-
-    const navLink =
-        document.getElementById(
-            "changelog-nav-link"
-        );
-
-
-    if (!section || !list) {
-        return;
-    }
-
-
-    // ========================================
-    // KEIN CHANGE LOG
-    // ========================================
-
-    if (
-        !changelog ||
-        !changelog.text ||
-        !changelog.text.trim()
-    ) {
-
-        section.style.display =
-            "none";
-
-
-        if (navLink) {
-
-            navLink.style.display =
-                "none";
+            script.remove();
 
         }
 
 
-        return;
+        window[callbackName] = function (data) {
 
-    }
+            if (finished) return;
 
+            finished = true;
 
-    // ========================================
-    // CHANGE LOG VORHANDEN
-    // ========================================
+            cleanup();
 
-    section.style.display =
-        "block";
+            resolve(data);
 
-
-    if (navLink) {
-
-        navLink.style.display =
-            "inline-block";
-
-    }
+        };
 
 
-    const title =
-        escapeHtml(
-            changelog.title ||
-            "Change Log"
-        );
+        script.onerror = function () {
+
+            if (finished) return;
+
+            finished = true;
+
+            cleanup();
+
+            reject(new Error("Google Apps Script konnte nicht geladen werden."));
+
+        };
 
 
-    const date =
-        escapeHtml(
-            changelog.date ||
-            ""
-        );
+        script.src =
+            API_URL +
+            "?action=" +
+            encodeURIComponent(action) +
+            "&callback=" +
+            encodeURIComponent(callbackName) +
+            "&_=" +
+            Date.now();
 
 
-    const text =
-        formatChangelogText(
-            changelog.text
-        );
+        document.body.appendChild(script);
 
-
-    list.innerHTML = `
-
-        <div class="changelog-item">
-
-            <div class="changelog-top">
-
-                <h3>
-                    ${title}
-                </h3>
-
-                ${
-                    date
-                        ? `
-                            <span class="changelog-date">
-                                ${date}
-                            </span>
-                          `
-                        : ""
-                }
-
-            </div>
-
-            <div class="changelog-text">
-                ${text}
-            </div>
-
-        </div>
-
-    `;
+    });
 
 }
 
 
-// ========================================
-// CHANGE LOG TEXT FORMATIEREN
-// ========================================
-
-function formatChangelogText(text) {
-
-    let result =
-        escapeHtml(
-            String(text)
-        );
-
-
-    result =
-        result.replace(
-            /\*\*(.*?)\*\*/g,
-            "<strong>$1</strong>"
-        );
-
-
-    result =
-        result.replace(
-            /\r?\n/g,
-            "<br>"
-        );
-
-
-    return result;
-
-}
-
-
-// ========================================
-// HTML SICHER MACHEN
-// ========================================
-
-function escapeHtml(text) {
-
-    return String(text)
-
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
-}
-
-
-// ========================================
-// STATUS LADEN
-// ========================================
+/* =========================================================
+   STATUS
+   ========================================================= */
 
 async function loadStatus() {
 
     try {
 
-        // Cache verhindern
-        const url =
-            API_URL +
-            "?action=status&_=" +
-            Date.now();
+        const data = await jsonp("status");
 
+        if (!data || !data.success) {
 
-        const response =
-            await fetch(
+            console.error("Status konnte nicht geladen werden.");
 
-                url,
+            applyStatus(DEFAULT_STATUS);
 
-                {
-                    method: "GET",
-                    cache: "no-store"
-                }
-
-            );
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Status konnte nicht geladen werden."
-            );
+            return;
 
         }
 
 
-        const data =
-            await response.json();
+        applyStatus({
 
+            status: data.status || "offline",
 
-        console.log(
-            "KavKaz Status:",
-            data
-        );
-
-
-        if (
-            !data ||
-            data.success === false
-        ) {
-
-            throw new Error(
-                data &&
-                data.error
-                    ? data.error
-                    : "Status konnte nicht geladen werden."
-            );
-
-        }
-
-
-        setStatus({
-
-            status:
-                data.status ||
-                DEFAULT_STATUS.status,
-
-            title:
-                data.title ||
-                getStatusTitle(
-                    data.status ||
-                    DEFAULT_STATUS.status
-                ),
+            title: data.title || "Bot Offline",
 
             text:
                 data.text ||
-                DEFAULT_STATUS.text
+                "Der Bot ist derzeit offline."
 
         });
-
 
     } catch (error) {
 
@@ -364,87 +136,152 @@ async function loadStatus() {
             error
         );
 
-
-        setStatus(
-            DEFAULT_STATUS
-        );
+        applyStatus(DEFAULT_STATUS);
 
     }
 
 }
 
 
-// ========================================
-// CHANGE LOG LADEN
-// ========================================
+function applyStatus(data) {
+
+    const statusElement =
+        document.getElementById("status");
+
+    const titleElement =
+        document.getElementById("status-title");
+
+    const textElement =
+        document.getElementById("status-text");
+
+    const indicator =
+        document.getElementById("status-indicator");
+
+
+    if (titleElement) {
+
+        titleElement.textContent =
+            data.title;
+
+    }
+
+
+    if (textElement) {
+
+        textElement.textContent =
+            data.text;
+
+    }
+
+
+    if (statusElement) {
+
+        statusElement.className =
+            "status-card " + data.status;
+
+    }
+
+
+    if (indicator) {
+
+        indicator.className =
+            "status-indicator " + data.status;
+
+    }
+
+}
+
+
+/* =========================================================
+   CHANGE LOG
+   ========================================================= */
 
 async function loadChangelog() {
 
     try {
 
-        // Cache verhindern
-        const url =
-            API_URL +
-            "?action=changelog&_=" +
-            Date.now();
+        const data =
+            await jsonp("changelog");
 
 
-        const response =
-            await fetch(
+        const container =
+            document.getElementById("changelog-list");
 
-                url,
 
-                {
-                    method: "GET",
-                    cache: "no-store"
-                }
+        const section =
+            document.getElementById("changelog");
 
+
+        const navLink =
+            document.querySelector(
+                'a[href="#changelog"]'
             );
 
 
-        if (!response.ok) {
-
-            throw new Error(
-                "Change Log konnte nicht geladen werden."
-            );
-
-        }
-
-
-        const result =
-            await response.json();
-
-
-        console.log(
-            "KavKaz Change Log:",
-            result
-        );
+        if (!container) return;
 
 
         if (
-            !result ||
-            result.success === false
+            !data ||
+            !data.success ||
+            !data.text ||
+            !data.text.trim()
         ) {
 
-            throw new Error(
+            if (section) {
 
-                result &&
-                result.error
+                section.style.display = "none";
 
-                    ? result.error
+            }
 
-                    : "Change Log konnte nicht geladen werden."
 
-            );
+            if (navLink) {
+
+                navLink.style.display = "none";
+
+            }
+
+
+            return;
 
         }
 
 
-        displayChangelog(
-            result.changelog ||
-            null
-        );
+        if (section) {
 
+            section.style.display = "";
+
+        }
+
+
+        if (navLink) {
+
+            navLink.style.display = "";
+
+        }
+
+
+        const date =
+            data.date || "";
+
+
+        container.innerHTML = `
+
+            <div class="changelog-item">
+
+                <div class="changelog-date">
+                    ${escapeHtml(date)}
+                </div>
+
+                <div class="changelog-content">
+                    ${formatChangelog(
+                        data.text
+                    )}
+                </div>
+
+            </div>
+
+        `;
 
     } catch (error) {
 
@@ -454,29 +291,76 @@ async function loadChangelog() {
         );
 
 
-        displayChangelog(
-            null
-        );
+        const section =
+            document.getElementById("changelog");
+
+
+        const navLink =
+            document.querySelector(
+                'a[href="#changelog"]'
+            );
+
+
+        if (section) {
+
+            section.style.display = "none";
+
+        }
+
+
+        if (navLink) {
+
+            navLink.style.display = "none";
+
+        }
 
     }
 
 }
 
 
-// ========================================
-// START
-// ========================================
+/* =========================================================
+   CHANGE LOG FORMATIERUNG
+   ========================================================= */
+
+function formatChangelog(text) {
+
+    return escapeHtml(text)
+        .replace(/\r\n/g, "\n")
+        .replace(/\r/g, "\n")
+        .replace(/\n/g, "<br>");
+
+}
+
+
+/* =========================================================
+   HTML SICHERHEIT
+   ========================================================= */
+
+function escapeHtml(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        text == null ? "" : String(text);
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================================
+   START
+   ========================================================= */
 
 document.addEventListener(
-
     "DOMContentLoaded",
-
-    () => {
+    function () {
 
         loadStatus();
 
         loadChangelog();
 
     }
-
 );
