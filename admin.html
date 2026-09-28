@@ -301,7 +301,7 @@
             color: #4ade80;
         }
 
-        .command-status.maintenance {
+        .command-status.development {
             background: rgba(249, 115, 22, 0.12);
             color: #fb923c;
         }
@@ -604,8 +604,8 @@
                         🟢 Aktiv
                     </option>
 
-                    <option value="maintenance">
-                        🟠 Wartung
+                    <option value="development">
+                        🟠 Entwicklung
                     </option>
 
                     <option value="disabled">
@@ -748,7 +748,7 @@
 // ========================================
 
 const API_URL =
-    "https://script.google.com/macros/s/AKfycbxj4MyQARTi7sUlHtZHX8Wq6cIX19jJlh596LmJiCdBt49EYwhiG4UK1-bdIwR8ZI1s/exec";
+    "https://script.google.com/macros/s/AKfycbxj4MyQARTi7sUlHtZHX8Wq6cIX19jLlh596LmJiCdBt49EYwhiG4UK1-bdIwR8ZI1s/exec";
 
 
 let selectedStatus = "offline";
@@ -1531,14 +1531,33 @@ function renderCommands() {
 
             if (
                 command.status ===
+                "development"
+            ) {
+
+                statusText =
+                    "🟠 Entwicklung";
+
+                statusClass =
+                    "development";
+
+            }
+
+
+            /*
+             * Alte gespeicherte Befehle mit
+             * "maintenance" werden ebenfalls
+             * als Entwicklung angezeigt.
+             */
+            if (
+                command.status ===
                 "maintenance"
             ) {
 
                 statusText =
-                    "🟠 Wartung";
+                    "🟠 Entwicklung";
 
                 statusClass =
-                    "maintenance";
+                    "development";
 
             }
 
@@ -1732,19 +1751,9 @@ async function saveCommand() {
                             id:
                                 editingCommandId || "",
 
-                            /*
-                             * WICHTIG:
-                             * Das Backend erwartet den
-                             * Befehlsnamen unter "command".
-                             */
                             command:
                                 name,
 
-                            /*
-                             * "name" bleibt ebenfalls
-                             * enthalten, damit die bisherige
-                             * Speicherung kompatibel bleibt.
-                             */
                             name:
                                 name,
 
@@ -1902,7 +1911,9 @@ function editCommand(id) {
             "command-status"
         )
         .value =
-        command.status || "active";
+        command.status === "maintenance"
+            ? "development"
+            : (command.status || "active");
 
 
     document
