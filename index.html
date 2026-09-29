@@ -334,8 +334,35 @@ async function loadStatus() {
             text;
 
 
-        titleElement.className =
-            "status " + status;
+        /*
+           Statusfarbe bestimmen
+        */
+
+        const titleLower =
+            title.toLowerCase();
+
+
+        if (titleLower.includes("online")) {
+
+            titleElement.className =
+                "status active";
+
+        } else if (
+            titleLower.includes("wartung") ||
+            titleLower.includes("entwicklung") ||
+            status === "maintenance" ||
+            status === "wartung"
+        ) {
+
+            titleElement.className =
+                "status maintenance";
+
+        } else {
+
+            titleElement.className =
+                "status offline";
+
+        }
 
 
     } catch (error) {
@@ -349,6 +376,12 @@ async function loadStatus() {
             "statusTitle"
         ).textContent =
             "Bot Offline";
+
+
+        document.getElementById(
+            "statusTitle"
+        ).className =
+            "status offline";
 
 
         document.getElementById(
@@ -519,7 +552,10 @@ async function loadCommands() {
             let statusText = "Aktiv";
             let badgeClass = "";
 
-            if (status === "development" || status === "wartung") {
+            if (
+                status === "development" ||
+                status === "wartung"
+            ) {
 
                 statusText = "Entwicklung";
                 badgeClass = "development";
