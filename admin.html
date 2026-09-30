@@ -494,11 +494,17 @@
 
 <script>
 
+
+/* =========================================================
+   AKTUELLE GOOGLE APPS SCRIPT API
+   ========================================================= */
+
 const API_URL =
-    "https://script.google.com/macros/s/AKfycbxj4MyQARTi7sUlHtZHX8Wq6cIX19jJlh596LmJiCdBt49EYwhiG4UK1-bdIwR8ZI1s/exec";
+    "https://script.google.com/macros/s/AKfycbxah6ugNeCZn1Vy2wt5tmFIGGQhQbFMJk20pSaP_8RGBpyEzp8IwAfVRkFZQBig9FrI/exec";
 
 
-let SESSION = localStorage.getItem("kavkaz_admin_session") || "";
+let SESSION =
+    localStorage.getItem("kavkaz_admin_session") || "";
 
 
 
@@ -531,74 +537,91 @@ function apiGet(params) {
             }
 
             try {
+
                 delete window[callbackName];
+
             } catch (e) {
-                window[callbackName] = undefined;
+
+                window[callbackName] =
+                    undefined;
+
             }
 
         }
 
 
-        window[callbackName] = function(result) {
+        window[callbackName] =
+            function(result) {
 
-            if (finished) {
-                return;
-            }
+                if (finished) {
+                    return;
+                }
 
-            finished = true;
+                finished = true;
 
-            cleanup();
+                cleanup();
 
-            resolve(result);
+                resolve(result);
 
-        };
+            };
 
 
-        script.onerror = function() {
+        script.onerror =
+            function() {
 
-            if (finished) {
-                return;
-            }
+                if (finished) {
+                    return;
+                }
 
-            finished = true;
+                finished = true;
 
-            cleanup();
+                cleanup();
 
-            reject(
-                new Error(
-                    "Verbindung zum Server fehlgeschlagen."
-                )
-            );
+                reject(
+                    new Error(
+                        "Verbindung zum Server fehlgeschlagen."
+                    )
+                );
 
-        };
+            };
 
 
         const query =
             new URLSearchParams();
 
 
-        Object.keys(params).forEach(function(key) {
+        Object.keys(params).forEach(
+            function(key) {
 
-            const value = params[key];
+                const value =
+                    params[key];
 
-            if (
-                value !== undefined &&
-                value !== null
-            ) {
 
-                query.append(
-                    key,
-                    value
-                );
+                if (
+                    value !== undefined &&
+                    value !== null
+                ) {
+
+                    query.append(
+                        key,
+                        value
+                    );
+
+                }
 
             }
-
-        });
+        );
 
 
         query.append(
             "callback",
             callbackName
+        );
+
+
+        query.append(
+            "_",
+            Date.now()
         );
 
 
@@ -608,26 +631,31 @@ function apiGet(params) {
             query.toString();
 
 
-        document.body.appendChild(script);
+        document.body.appendChild(
+            script
+        );
 
 
-        setTimeout(function() {
+        setTimeout(
+            function() {
 
-            if (finished) {
-                return;
-            }
+                if (finished) {
+                    return;
+                }
 
-            finished = true;
+                finished = true;
 
-            cleanup();
+                cleanup();
 
-            reject(
-                new Error(
-                    "Zeitüberschreitung beim Server."
-                )
-            );
+                reject(
+                    new Error(
+                        "Zeitüberschreitung beim Server."
+                    )
+                );
 
-        }, 20000);
+            },
+            20000
+        );
 
     });
 
@@ -642,20 +670,30 @@ function apiGet(params) {
 async function login() {
 
     const username =
-        document.getElementById("username").value.trim();
+        document
+            .getElementById("username")
+            .value
+            .trim();
+
 
     const password =
-        document.getElementById("password").value;
+        document
+            .getElementById("password")
+            .value;
 
 
     const message =
-        document.getElementById("loginMessage");
+        document.getElementById(
+            "loginMessage"
+        );
 
 
     if (!username || !password) {
 
         message.innerHTML =
-            '<span class="error">Bitte Benutzername und Passwort eingeben.</span>';
+            '<span class="error">' +
+            'Bitte Benutzername und Passwort eingeben.' +
+            '</span>';
 
         return;
 
@@ -696,17 +734,21 @@ async function login() {
 
 
             message.innerHTML =
-                '<span class="success">Login erfolgreich.</span>';
+                '<span class="success">' +
+                'Login erfolgreich.' +
+                '</span>';
 
 
-            document.getElementById(
-                "loginBox"
-            ).classList.add("hidden");
+            document
+                .getElementById("loginBox")
+                .classList
+                .add("hidden");
 
 
-            document.getElementById(
-                "adminPanel"
-            ).classList.remove("hidden");
+            document
+                .getElementById("adminPanel")
+                .classList
+                .remove("hidden");
 
 
             document.getElementById(
@@ -760,14 +802,16 @@ function logout() {
     );
 
 
-    document.getElementById(
-        "adminPanel"
-    ).classList.add("hidden");
+    document
+        .getElementById("adminPanel")
+        .classList
+        .add("hidden");
 
 
-    document.getElementById(
-        "loginBox"
-    ).classList.remove("hidden");
+    document
+        .getElementById("loginBox")
+        .classList
+        .remove("hidden");
 
 
     document.getElementById(
@@ -793,14 +837,17 @@ function checkSession() {
         return false;
     }
 
-    document.getElementById(
-        "loginBox"
-    ).classList.add("hidden");
+
+    document
+        .getElementById("loginBox")
+        .classList
+        .add("hidden");
 
 
-    document.getElementById(
-        "adminPanel"
-    ).classList.remove("hidden");
+    document
+        .getElementById("adminPanel")
+        .classList
+        .remove("hidden");
 
 
     return true;
@@ -840,13 +887,53 @@ async function loadStatus() {
         }
 
 
-        const status =
-            data.status || "offline";
+        /*
+           Status anhand des Titels bestimmen.
+
+           Dadurch wird "Online" auch dann erkannt,
+           wenn die API zusätzlich noch
+           status: "offline" zurückgibt.
+        */
+
+        const title =
+            String(
+                data.title || ""
+            ).toLowerCase();
+
+
+        let status =
+            "offline";
+
+
+        if (
+            title.includes("online")
+        ) {
+
+            status =
+                "active";
+
+        } else if (
+            title.includes("wartung") ||
+            title.includes("entwicklung") ||
+            data.status === "maintenance" ||
+            data.status === "wartung"
+        ) {
+
+            status =
+                "maintenance";
+
+        } else {
+
+            status =
+                "offline";
+
+        }
 
 
         document.getElementById(
             "botStatus"
-        ).value = status;
+        ).value =
+            status;
 
 
         document.getElementById(
@@ -859,6 +946,13 @@ async function loadStatus() {
             "botText"
         ).value =
             data.text || "";
+
+
+        console.log(
+            "Geladener Status:",
+            data
+        );
+
 
     } catch (error) {
 
@@ -888,7 +982,9 @@ async function saveStatus() {
     if (!SESSION) {
 
         message.innerHTML =
-            '<span class="error">Keine gültige Sitzung.</span>';
+            '<span class="error">' +
+            'Keine gültige Sitzung.' +
+            '</span>';
 
         return;
 
@@ -941,7 +1037,18 @@ async function saveStatus() {
         ) {
 
             message.innerHTML =
-                '<span class="success">✅ Status erfolgreich gespeichert.</span>';
+                '<span class="success">' +
+                '✅ Status erfolgreich gespeichert.' +
+                '</span>';
+
+
+            /*
+               Nach dem Speichern den aktuellen
+               Status erneut vom Server laden.
+            */
+
+            await loadStatus();
+
 
         } else {
 
@@ -955,11 +1062,14 @@ async function saveStatus() {
                 ) +
                 '</span>';
 
+
             if (
                 data &&
                 data.message === "Nicht autorisiert"
             ) {
+
                 logout();
+
             }
 
         }
@@ -969,7 +1079,8 @@ async function saveStatus() {
         console.error(error);
 
         message.innerHTML =
-            '<span class="error">❌ Fehler: ' +
+            '<span class="error">' +
+            '❌ Fehler: ' +
             error.message +
             '</span>';
 
@@ -992,7 +1103,9 @@ async function loadCommands() {
 
 
     list.innerHTML =
-        '<div class="small">Befehle werden geladen...</div>';
+        '<div class="small">' +
+        'Befehle werden geladen...' +
+        '</div>';
 
 
     try {
@@ -1011,7 +1124,9 @@ async function loadCommands() {
         ) {
 
             list.innerHTML =
-                '<div class="error">❌ Befehle konnten nicht geladen werden.</div>';
+                '<div class="error">' +
+                '❌ Befehle konnten nicht geladen werden.' +
+                '</div>';
 
             return;
 
@@ -1024,10 +1139,14 @@ async function loadCommands() {
                 : [];
 
 
-        if (commands.length === 0) {
+        if (
+            commands.length === 0
+        ) {
 
             list.innerHTML =
-                '<div class="small">Noch keine Befehle vorhanden.</div>';
+                '<div class="small">' +
+                'Noch keine Befehle vorhanden.' +
+                '</div>';
 
             return;
 
@@ -1037,95 +1156,109 @@ async function loadCommands() {
         list.innerHTML = "";
 
 
-        commands.forEach(function(command) {
+        commands.forEach(
+            function(command) {
 
-            const item =
-                document.createElement("div");
-
-
-            item.className =
-                "command-item";
-
-
-            let statusText =
-                "🔴 Deaktiviert";
+                const item =
+                    document.createElement(
+                        "div"
+                    );
 
 
-            if (
-                command.status === "active"
-            ) {
-
-                statusText =
-                    "🟢 Aktiv";
-
-            } else if (
-                command.status === "development" ||
-                command.status === "maintenance"
-            ) {
-
-                statusText =
-                    "🟠 Entwicklung";
-
-            }
+                item.className =
+                    "command-item";
 
 
-            item.innerHTML = `
+                let statusText =
+                    "🔴 Deaktiviert";
 
-                <div class="command-header">
 
-                    <div>
+                if (
+                    command.status === "active"
+                ) {
 
-                        <div class="command-name">
-                            ${escapeHtml(command.name || command.command || "")}
-                        </div>
+                    statusText =
+                        "🟢 Aktiv";
 
-                        <div class="command-description">
-                            ${escapeHtml(command.description || "")}
+                } else if (
+                    command.status === "development" ||
+                    command.status === "maintenance"
+                ) {
+
+                    statusText =
+                        "🟠 Entwicklung";
+
+                }
+
+
+                item.innerHTML = `
+
+                    <div class="command-header">
+
+                        <div>
+
+                            <div class="command-name">
+                                ${escapeHtml(
+                                    command.name ||
+                                    command.command ||
+                                    ""
+                                )}
+                            </div>
+
+                            <div class="command-description">
+                                ${escapeHtml(
+                                    command.description ||
+                                    ""
+                                )}
+                            </div>
+
                         </div>
 
                     </div>
 
-                </div>
+                    <div class="command-status">
+                        Status: ${statusText}
+                    </div>
 
-                <div class="command-status">
-                    Status: ${statusText}
-                </div>
+                    <div class="command-actions">
 
-                <div class="command-actions">
+                        <button
+                            class="secondary"
+                            onclick="editCommand('${escapeJs(command.id)}')"
+                        >
+                            Bearbeiten
+                        </button>
 
-                    <button
-                        class="secondary"
-                        onclick="editCommand('${escapeJs(command.id)}')"
-                    >
-                        Bearbeiten
-                    </button>
+                        <button
+                            class="danger"
+                            onclick="deleteCommand('${escapeJs(command.id)}')"
+                        >
+                            Löschen
+                        </button>
 
-                    <button
-                        class="danger"
-                        onclick="deleteCommand('${escapeJs(command.id)}')"
-                    >
-                        Löschen
-                    </button>
+                    </div>
 
-                </div>
-
-            `;
+                `;
 
 
-            list.appendChild(item);
+                list.appendChild(item);
 
-        });
+            }
+        );
 
 
         window.kavkazCommands =
             commands;
+
 
     } catch (error) {
 
         console.error(error);
 
         list.innerHTML =
-            '<div class="error">❌ Befehle konnten nicht geladen werden.</div>';
+            '<div class="error">' +
+            '❌ Befehle konnten nicht geladen werden.' +
+            '</div>';
 
     }
 
@@ -1148,7 +1281,9 @@ async function saveCommand() {
     if (!SESSION) {
 
         message.innerHTML =
-            '<span class="error">Keine gültige Sitzung.</span>';
+            '<span class="error">' +
+            'Keine gültige Sitzung.' +
+            '</span>';
 
         return;
 
@@ -1156,27 +1291,31 @@ async function saveCommand() {
 
 
     const name =
-        document.getElementById(
-            "commandName"
-        ).value.trim();
+        document
+            .getElementById("commandName")
+            .value
+            .trim();
 
 
     const description =
-        document.getElementById(
-            "commandDescription"
-        ).value.trim();
+        document
+            .getElementById("commandDescription")
+            .value
+            .trim();
 
 
     let status =
-        document.getElementById(
-            "commandStatus"
-        ).value;
+        document
+            .getElementById("commandStatus")
+            .value;
 
 
     if (!name) {
 
         message.innerHTML =
-            '<span class="error">Bitte einen Befehl eingeben.</span>';
+            '<span class="error">' +
+            'Bitte einen Befehl eingeben.' +
+            '</span>';
 
         return;
 
@@ -1186,15 +1325,22 @@ async function saveCommand() {
     if (!description) {
 
         message.innerHTML =
-            '<span class="error">Bitte eine Beschreibung eingeben.</span>';
+            '<span class="error">' +
+            'Bitte eine Beschreibung eingeben.' +
+            '</span>';
 
         return;
 
     }
 
 
-    if (status === "maintenance") {
-        status = "development";
+    if (
+        status === "maintenance"
+    ) {
+
+        status =
+            "development";
+
     }
 
 
@@ -1226,7 +1372,9 @@ async function saveCommand() {
         ) {
 
             message.innerHTML =
-                '<span class="success">✅ Befehl erfolgreich gespeichert.</span>';
+                '<span class="success">' +
+                '✅ Befehl erfolgreich gespeichert.' +
+                '</span>';
 
 
             document.getElementById(
@@ -1244,7 +1392,26 @@ async function saveCommand() {
             ).value = "active";
 
 
+            window.editingCommandId =
+                null;
+
+
+            const button =
+                document.querySelector(
+                    'button[onclick="saveCommand()"]'
+                );
+
+
+            if (button) {
+
+                button.textContent =
+                    "Befehl speichern";
+
+            }
+
+
             await loadCommands();
+
 
         } else {
 
@@ -1275,7 +1442,8 @@ async function saveCommand() {
         console.error(error);
 
         message.innerHTML =
-            '<span class="error">❌ Fehler: ' +
+            '<span class="error">' +
+            '❌ Fehler: ' +
             error.message +
             '</span>';
 
@@ -1296,11 +1464,14 @@ function editCommand(id) {
 
 
     const command =
-        commands.find(function(item) {
+        commands.find(
+            function(item) {
 
-            return String(item.id) === String(id);
+                return String(item.id) ===
+                    String(id);
 
-        });
+            }
+        );
 
 
     if (!command) {
@@ -1330,11 +1501,17 @@ function editCommand(id) {
 
 
     let status =
-        command.status || "active";
+        command.status ||
+        "active";
 
 
-    if (status === "maintenance") {
-        status = "development";
+    if (
+        status === "maintenance"
+    ) {
+
+        status =
+            "development";
+
     }
 
 
@@ -1444,7 +1621,9 @@ async function addChangelog() {
     if (!SESSION) {
 
         message.innerHTML =
-            '<span class="error">Keine gültige Sitzung.</span>';
+            '<span class="error">' +
+            'Keine gültige Sitzung.' +
+            '</span>';
 
         return;
 
@@ -1452,15 +1631,18 @@ async function addChangelog() {
 
 
     const text =
-        document.getElementById(
-            "changelogText"
-        ).value.trim();
+        document
+            .getElementById("changelogText")
+            .value
+            .trim();
 
 
     if (!text) {
 
         message.innerHTML =
-            '<span class="error">Bitte einen Change Log eingeben.</span>';
+            '<span class="error">' +
+            'Bitte einen Change Log eingeben.' +
+            '</span>';
 
         return;
 
@@ -1491,7 +1673,9 @@ async function addChangelog() {
         ) {
 
             message.innerHTML =
-                '<span class="success">✅ Change Log erfolgreich veröffentlicht.</span>';
+                '<span class="success">' +
+                '✅ Change Log erfolgreich veröffentlicht.' +
+                '</span>';
 
 
             document.getElementById(
@@ -1527,7 +1711,8 @@ async function addChangelog() {
         console.error(error);
 
         message.innerHTML =
-            '<span class="error">❌ Fehler: ' +
+            '<span class="error">' +
+            '❌ Fehler: ' +
             error.message +
             '</span>';
 
@@ -1544,11 +1729,26 @@ async function addChangelog() {
 function escapeHtml(value) {
 
     return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
@@ -1556,8 +1756,14 @@ function escapeHtml(value) {
 function escapeJs(value) {
 
     return String(value)
-        .replace(/\\/g, "\\\\")
-        .replace(/'/g, "\\'");
+        .replace(
+            /\\/g,
+            "\\\\"
+        )
+        .replace(
+            /'/g,
+            "\\'"
+        );
 
 }
 
@@ -1575,7 +1781,8 @@ document.addEventListener(
             event.key === "Enter" &&
             !document
                 .getElementById("loginBox")
-                .classList.contains("hidden")
+                .classList
+                .contains("hidden")
         ) {
 
             login();
